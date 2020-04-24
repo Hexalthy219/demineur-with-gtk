@@ -14,11 +14,11 @@ LDFLAGS=`pkg-config --cflags --libs gtk+-2.0`
 
 # Files
 EXEC=demineur
-MODULES=main_demineur.c vue_demineur.c controleur_demineur.c modele_demineur.c 
-OBJECTS=main_demineur.o vue_demineur.o controleur_demineur.o modele_demineur.o
+MODULES=main_demineur.c modele_demineur.c vue_demineur.c controleur_demineur.c  
+OBJECTS=main_demineur.o modele_demineur.o vue_demineur.o controleur_demineur.o 
 
 # Documentation
-DOC = vue_demineur.c vue_demineur.h controleur_demineur.c controleur_demineur.h modele_demineur.c modele_demineur.h main_demineur.c
+DOC = main_demineur.c modele_demineur.c modele_demineur.h vue_demineur.c vue_demineur.h controleur_demineur.c controleur_demineur.h  
 
 
 ## Rules
@@ -26,20 +26,20 @@ DOC = vue_demineur.c vue_demineur.h controleur_demineur.c controleur_demineur.h 
 #compilation
 all: $(EXEC)
 
-calculatrice: $(OBJECTS)
+demineur: $(OBJECTS)
 	$(LD) -o $(EXEC) $(OBJECTS) $(LDFLAGS)
 
 main_demineur.o: main_demineur.c
 	$(CC) -c main_demineur.c -o main_demineur.o $(CFLAGS)
+
+modele_demineur.o: modele_demineur.c
+	$(CC) -c modele_demineur.c -o modele_demineur.o $(CFLAGS)
 
 vue_demineur.o: vue_demineur.c
 	$(CC) -c vue_demineur.c -o vue_demineur.o $(CFLAGS)
 
 controleur_demineur.o: controleur_demineur.c
 	$(CC) -c controleur_demineur.c -o controleur_demineur.o $(CFLAGS)
-
-modele_demineur.o: modele_demineur.c
-	$(CC) -c modele_demineur.c -o modele_demineur.o $(CFLAGS)
 
 
 #compilation doc
