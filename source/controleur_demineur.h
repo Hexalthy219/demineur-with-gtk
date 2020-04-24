@@ -11,6 +11,6 @@
 #ifndef __CONTROLEUR_DEMINEUR__
 #define __CONTROLEUR_DEMINEUR__
 
-short **cree_tableau2D(int ligne, int colonne);
+
 
 #endif

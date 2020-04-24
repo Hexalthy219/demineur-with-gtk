@@ -14,11 +14,11 @@ LDFLAGS=`pkg-config --cflags --libs gtk+-2.0`
 
 # Files
 EXEC=demineur
-MODULES=main_demineur.c modele_demineur.c vue_demineur.c controleur_demineur.c  
-OBJECTS=main_demineur.o modele_demineur.o vue_demineur.o controleur_demineur.o 
+MODULES=main_demineur.c modele_demineur.c vue_demineur.c controleur_demineur.c  type_opaque.c
+OBJECTS=main_demineur.o modele_demineur.o vue_demineur.o controleur_demineur.o type_opaque.o 
 
 # Documentation
-DOC = main_demineur.c modele_demineur.c modele_demineur.h vue_demineur.c vue_demineur.h controleur_demineur.c controleur_demineur.h  
+DOC = main_demineur.c modele_demineur.c modele_demineur.h vue_demineur.c vue_demineur.h controleur_demineur.c controleur_demineur.h  type_opaque.c type_opaque.h
 
 
 ## Rules
@@ -40,6 +40,10 @@ vue_demineur.o: vue_demineur.c
 
 controleur_demineur.o: controleur_demineur.c
 	$(CC) -c controleur_demineur.c -o controleur_demineur.o $(CFLAGS)
+
+type_opaque.o: type_opaque.c
+	$(CC) -c type_opaque.c -o type_opaque.o $(CFLAGS)
+
 
 
 #compilation doc
