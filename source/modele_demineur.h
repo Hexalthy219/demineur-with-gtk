@@ -13,5 +13,6 @@
 #include "type_opaque.h"
 
 void aleatoire_bombe(Terrain *terrain_de_jeu);
+void verife_bombe_dans_ta_mere(Terrain *terrain_de_jeu, unsigned short ligne, unsigned short colonne);
 
 #endif
