@@ -76,6 +76,7 @@ Boite *get_elem_champ_mine(Terrain *recup, unsigned int i, unsigned int j){
 
 void set_champ_mine(Terrain *change, Boite ***champ_mine){
     assert(change!=NULL && champ_mine!=NULL);
+    destructeur_champ_mine(change->champ_mine, change->regle->ligne, change->regle->colonne);
     change->champ_mine = champ_mine;
 }
 void set_elem_champ_mine(Terrain *change, Boite *mine, unsigned int i, unsigned int j){
