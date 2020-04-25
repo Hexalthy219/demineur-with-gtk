@@ -51,6 +51,17 @@ typedef struct Terrain_t Terrain;
 Terrain *constructeur_Terrain(unsigned short ligne, unsigned short colonne, unsigned short temps, unsigned short nombre_mine);
 
 void destructeur_Terrain(Terrain *terrain);
+Boite ***get_champ_mine(Terrain *recup);
+
+Boite *get_elem_champ_mine(Terrain *recup, unsigned int i, unsigned int j);
+
+void set_champ_mine(Terrain *change, Boite ***champ_mine);
+
+void set_elem_champ_mine(Terrain *change, Boite *mine, unsigned int i, unsigned int j);
+
+Regle *get_regle(Terrain *recup);
+
+void set_regle(Terrain *change, Regle *regle);
 
 Boite ***constructeur_champ_mine(unsigned short ligne, unsigned short colonne);
 
