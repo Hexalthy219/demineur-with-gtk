@@ -9,3 +9,5 @@
  */
 
 #include "modele_demineur.h"
+#include "type_opaque.h"
+
