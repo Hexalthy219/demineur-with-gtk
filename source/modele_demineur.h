@@ -10,5 +10,8 @@
 
 #ifndef __MODELE_DEMINEUR__
 #define __MODELE_DEMINEUR__
+#include "type_opaque.h"
+
+void aleatoire_bombe(Terrain *terrain_de_jeu);
 
 #endif

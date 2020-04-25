@@ -65,6 +65,34 @@ void destructeur_Terrain(Terrain *terrain){
     free(terrain);
 }
 
+Boite ***get_champ_mine(Terrain *recup){
+    assert(recup!=NULL);
+    return recup->champ_mine;
+}
+Boite *get_elem_champ_mine(Terrain *recup, unsigned int i, unsigned int j){
+    assert(recup!=NULL);
+    return recup->champ_mine[i][j];
+}
+
+void set_champ_mine(Terrain *change, Boite ***champ_mine){
+    assert(change!=NULL && champ_mine!=NULL);
+    destructeur_champ_mine(change->champ_mine, change->regle->ligne, change->regle->colonne);
+    change->champ_mine = champ_mine;
+}
+void set_elem_champ_mine(Terrain *change, Boite *mine, unsigned int i, unsigned int j){
+    assert(change!=NULL);
+    change->champ_mine[i][j] = mine; 
+}
+
+Regle *get_regle(Terrain *recup){
+    assert(recup!=NULL);
+    return recup->regle;
+}
+void set_regle(Terrain *change, Regle *regle){
+    assert(change!=NULL && regle!=NULL);
+    change->regle = regle;
+}
+
 Boite ***constructeur_champ_mine(unsigned short ligne, unsigned short colonne){
     assert(ligne>0 && colonne>0);
 
