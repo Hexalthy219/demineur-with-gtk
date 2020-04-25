@@ -9,10 +9,6 @@
  */
 
 #include "modele_demineur.h"
-<<<<<<< HEAD
-#include "type_opaque.h"
-
-=======
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -37,4 +33,3 @@ void aleatoire_bombe(Terrain *terrain_de_jeu){
         
     }
 }
->>>>>>> c32de931c7c310112c48ac316406cd9d2dc48101
