@@ -22,6 +22,7 @@
 #define NBR_COLONNE_DEFAULT 10
 
 
+
 int main(int argc, char **argv){
     char *optstring = "l:h:t:m:H";
     Regle *recup_arg = constructeur_Regle();
@@ -76,8 +77,12 @@ int main(int argc, char **argv){
     destructeur_Regle(recup_arg);
     if (terrain==NULL)
         return EXIT_FAILURE;
+    
+    printf("bite\n");
+    initialisation_champ_mine(terrain);
+    printf("couille\n");
 
-    char texte_nbr_mine[4];
+    char texte_nbr_mine[4], texte[4];
 
     GtkWidget *pFenetre;
     GtkWidget *pVBox;
@@ -107,7 +112,8 @@ int main(int argc, char **argv){
         pHBox_champ_mine[i]=gtk_hbox_new(TRUE, 0);
         gtk_box_pack_start(GTK_BOX(pVBox), pHBox_champ_mine[i], TRUE, TRUE, 0);
         for(int j=0; j<nombre_colonne; j++){
-            pButton[i][j]=gtk_button_new_with_label("0");
+            sprintf(texte, "%hd", get_mine(get_elem_champ_mine(terrain, i, j)));
+            pButton[i][j]=gtk_button_new_with_label(texte);
             gtk_widget_set_size_request(pButton[i][j], 40, 40);
             gtk_box_pack_start(GTK_BOX(pHBox_champ_mine[i]), pButton[i][j], TRUE, TRUE, 0);
         }
