@@ -22,14 +22,62 @@
 #define NBR_COLONNE_DEFAULT 10
 
 
-int main(int argc, const char **argv){
+int main(int argc, char **argv){
+    char *optstring = "l:h:t:m:H";
+    Regle *recup_arg = constructeur_Regle();
+    int val, recup;
+    
+    set_ligne(recup_arg, NBR_LIGNE_DEFAULT);
+    set_colonne(recup_arg, NBR_COLONNE_DEFAULT);
+    set_temps(recup_arg, TEMPS_DEFAULT);
+    set_nombre_mine(recup_arg, NBR_MINE_DEFAULT);
+
+    while ((val = getopt(argc, argv, optstring)) != EOF)
+    {
+        switch (val)
+        {
+        case 'l':
+            recup = atoi(optarg);
+            if(recup>=10 && recup<=30)
+                set_ligne(recup_arg, (unsigned short)recup);
+            break;
+        case 'h':
+            recup = atoi(optarg);
+            if(recup>=10 && recup<=30)
+                set_colonne(recup_arg, (unsigned short)recup);
+            break;
+        case 't':
+            recup = atoi(optarg);
+            if(recup>=60 && recup<=600)
+                set_temps(recup_arg, (unsigned short)recup);
+            break;
+        case 'm':
+            recup = atoi(optarg);
+            if(recup>=10 && recup<=(get_ligne(recup_arg)*get_colonne(recup_arg)))
+                set_nombre_mine(recup_arg, (unsigned short)recup);
+            break;
+        case 'H':
+            printf("help");
+            return EXIT_SUCCESS;
+
+        default:
+            break;
+        }
+    }
+
+    Terrain *terrain = constructeur_Terrain(get_ligne(recup_arg), get_colonne(recup_arg), get_temps(recup_arg), get_nombre_mine(recup_arg));
+    destructeur_Regle(recup_arg);
+    if (terrain==NULL)
+        return EXIT_FAILURE;
 
     GtkWidget *pFenetre;
     GtkWidget *pVBox;
-    GtkWidget *pHBox[NBR_LIGNE_DEFAULT+1];
-    GtkWidget *pButton[NBR_LIGNE_DEFAULT][NBR_COLONNE_DEFAULT];
+    GtkWidget *pHBox_info;
+    GtkWidget *pHBox_champ_mine[get_ligne(get_regle(terrain))];
+    GtkWidget *pButton[get_ligne(get_regle(terrain))][get_colonne(get_regle(terrain))];
     GtkWidget *pLabel_nbr_mine = gtk_label_new("10");
     GtkWidget *pLabel_timer = gtk_label_new("60");
+
 
     gtk_init(&argc, &argv);
 
@@ -40,21 +88,21 @@ int main(int argc, const char **argv){
     g_signal_connect(G_OBJECT(pFenetre), "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
     pVBox = gtk_vbox_new(TRUE, 0);
-    pHBox[0] = gtk_hbox_new(TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(pVBox), pHBox[0], TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(pHBox[0]), pLabel_nbr_mine, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(pHBox[0]), pLabel_timer, TRUE, TRUE, 0);
-
-    for(int i=1; i<NBR_LIGNE_DEFAULT+1; i++){
-        pHBox[i]=gtk_hbox_new(TRUE, 0);
-        gtk_box_pack_start(GTK_BOX(pVBox), pHBox[i], TRUE, TRUE, 0);
-        for(int j=0; j<NBR_COLONNE_DEFAULT; j++){
-            pButton[i-1][j]=gtk_button_new_with_label("0");
-            gtk_box_pack_start(GTK_BOX(pHBox[i]), pButton[i-1][j], TRUE, TRUE, 0);
+    pHBox_info = gtk_hbox_new(TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(pVBox), pHBox_info, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_nbr_mine, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_timer, TRUE, TRUE, 0);
+    int nombre_ligne = get_ligne(get_regle(terrain)), nombre_colonne = get_colonne(get_regle(terrain));
+    for (int i = 0; i < nombre_ligne; i++)
+    {
+        pHBox_champ_mine[i]=gtk_hbox_new(TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(pVBox), pHBox_champ_mine[i], TRUE, TRUE, 0);
+        for(int j=0; j<nombre_colonne; j++){
+            pButton[i][j]=gtk_button_new_with_label("0");
+            gtk_widget_set_size_request(pButton[i][j], 50, 50);
+            gtk_box_pack_start(GTK_BOX(pHBox_champ_mine[i]), pButton[i][j], TRUE, TRUE, 0);
         }
     }
-
-
 
     gtk_container_add(GTK_CONTAINER(pFenetre), pVBox);
     gtk_widget_show_all(pFenetre);

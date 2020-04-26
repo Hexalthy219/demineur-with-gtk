@@ -22,14 +22,12 @@ void aleatoire_bombe(Terrain *terrain_de_jeu){
 
     
 
-    for(unsigned short k = 0; k < nbr_mine; k++){
+    for(unsigned short k = 0; k < nbr_mine;){
         unsigned short i = rand()%ligne_max;
         unsigned short j = rand()%colonne_max;
-        if(get_mine(get_elem_champ_mine(terrain_de_jeu, i, j)) == 0)
-            --k;
-        else{
+        if(get_mine(get_elem_champ_mine(terrain_de_jeu, i, j)) != 0){
             set_mine(get_elem_champ_mine(terrain_de_jeu, i, j), -1);
+            k++;
         }
-        
     }
 }
