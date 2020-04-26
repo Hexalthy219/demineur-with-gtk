@@ -53,11 +53,18 @@ int main(int argc, char **argv){
             break;
         case 'm':
             recup = atoi(optarg);
-            if(recup>=10 && recup<=(get_ligne(recup_arg)*get_colonne(recup_arg)))
+            
+            if(recup>=10 && (unsigned short)recup<=(get_colonne(recup_arg)*get_ligne(recup_arg)))
                 set_nombre_mine(recup_arg, (unsigned short)recup);
             break;
         case 'H':
-            printf("help");
+            printf("usage : ./demineur [-l <nombre ligne>] [-h <nombre colonne>] [-t <temps>] [-m <nombre mine>] [-H]\n\n");
+            printf("\tl\tChoisir le nombre de ligne du demineur (10(default) - 30)\n");
+            printf("\th\tChoisir le nombre de colonne du demineur (10(default) - 30)\n");
+            printf("\tt\tChoisir le temps max pour résoudre le démineur (60(default) - 600)(secondes)\n");
+            printf("\tm\tChoisir le nombre de mine (10(default) - l*h)\n");
+            printf("\tH\thelp\n\n");
+            printf("Si une option ne respecte pas les valeurs max, celle-ci sera automatique établie à sa valeur par défaut.\n");
             return EXIT_SUCCESS;
 
         default:
@@ -70,12 +77,15 @@ int main(int argc, char **argv){
     if (terrain==NULL)
         return EXIT_FAILURE;
 
+    char texte_nbr_mine[4];
+
     GtkWidget *pFenetre;
     GtkWidget *pVBox;
     GtkWidget *pHBox_info;
     GtkWidget *pHBox_champ_mine[get_ligne(get_regle(terrain))];
     GtkWidget *pButton[get_ligne(get_regle(terrain))][get_colonne(get_regle(terrain))];
-    GtkWidget *pLabel_nbr_mine = gtk_label_new("10");
+    sprintf(texte_nbr_mine, "%hu", get_nombre_mine(get_regle(terrain)));
+    GtkWidget *pLabel_nbr_mine = gtk_label_new(texte_nbr_mine);
     GtkWidget *pLabel_timer = gtk_label_new("60");
 
 
@@ -93,13 +103,12 @@ int main(int argc, char **argv){
     gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_nbr_mine, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_timer, TRUE, TRUE, 0);
     int nombre_ligne = get_ligne(get_regle(terrain)), nombre_colonne = get_colonne(get_regle(terrain));
-    for (int i = 0; i < nombre_ligne; i++)
-    {
+    for (int i = 0; i < nombre_ligne; i++){
         pHBox_champ_mine[i]=gtk_hbox_new(TRUE, 0);
         gtk_box_pack_start(GTK_BOX(pVBox), pHBox_champ_mine[i], TRUE, TRUE, 0);
         for(int j=0; j<nombre_colonne; j++){
             pButton[i][j]=gtk_button_new_with_label("0");
-            gtk_widget_set_size_request(pButton[i][j], 50, 50);
+            gtk_widget_set_size_request(pButton[i][j], 40, 40);
             gtk_box_pack_start(GTK_BOX(pHBox_champ_mine[i]), pButton[i][j], TRUE, TRUE, 0);
         }
     }
