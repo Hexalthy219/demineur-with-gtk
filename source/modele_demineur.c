@@ -40,13 +40,14 @@ void aleatoire_bombe_et_compteur(Terrain *terrain_de_jeu){
 }
 
 void verife_bombe_dans_ta_mere(Terrain *terrain_de_jeu, unsigned short ligne, unsigned short colonne){
-    
+
     // if(!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)) > 0){
-        
+    //    set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne), 1);
     //     //affiche l'image démerde toi
     // }
     if (!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && !(get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)))){
         //affiche cette case en blanc
+        set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne), 1);
         unsigned short colonne_max = get_ligne(get_regle(terrain_de_jeu)) - 1;
         unsigned short ligne_max = get_colonne(get_regle(terrain_de_jeu)) - 1;
         if(ligne == 0){
