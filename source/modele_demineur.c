@@ -12,11 +12,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <assert.h>
 
 static void actualise_compteur_autour_de_bombe(Terrain *Terrain_de_jeu, unsigned short i, unsigned short j, unsigned short ligne_max, unsigned short colonne_max);
 
+void initialisation_champ_mine(Terrain *terrain_de_jeu){
+    assert(terrain_de_jeu!=NULL);
+    initialisation_mine_0(terrain_de_jeu);
+    aleatoire_bombe_et_compteur(terrain_de_jeu);
+}
 
-void initialisation_champ_mine_0(Terrain *terrain_de_jeu){
+
+void initialisation_mine_0(Terrain *terrain_de_jeu){
+    assert(terrain_de_jeu != NULL);
     unsigned short colonne_max = get_ligne(get_regle(terrain_de_jeu));
     unsigned short ligne_max = get_colonne(get_regle(terrain_de_jeu));
 
@@ -28,6 +36,7 @@ void initialisation_champ_mine_0(Terrain *terrain_de_jeu){
 }
 
 void aleatoire_bombe_et_compteur(Terrain *terrain_de_jeu){
+    assert(terrain_de_jeu != NULL);
     srand(time(NULL));
     unsigned short nbr_mine = get_nombre_mine(get_regle(terrain_de_jeu));
     unsigned short colonne_max = get_ligne(get_regle(terrain_de_jeu));
@@ -49,7 +58,7 @@ void aleatoire_bombe_et_compteur(Terrain *terrain_de_jeu){
 }
 
 void verife_bombe_dans_ta_mere(Terrain *terrain_de_jeu, unsigned short ligne, unsigned short colonne){
-
+    assert(terrain_de_jeu != NULL);
     // if(!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)) > 0){
     //    set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne), 1);
     //     //affiche l'image démerde toi
@@ -124,6 +133,7 @@ void verife_bombe_dans_ta_mere(Terrain *terrain_de_jeu, unsigned short ligne, un
 }
 
 static void actualise_compteur_autour_de_bombe(Terrain *terrain_de_jeu, unsigned short i, unsigned short j, unsigned short ligne_max, unsigned short colonne_max){
+    assert(terrain_de_jeu != NULL);
     if(i==0){
         if (get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j)) != -1)
             set_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j), get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j)) + 1);
