@@ -12,7 +12,7 @@
 #define __MODELE_DEMINEUR__
 #include "type_opaque.h"
 
-void aleatoire_bombe(Terrain *terrain_de_jeu);
+void aleatoire_bombe_et_compteur(Terrain *terrain_de_jeu);
 void verife_bombe_dans_ta_mere(Terrain *terrain_de_jeu, unsigned short ligne, unsigned short colonne);
 
 #endif
