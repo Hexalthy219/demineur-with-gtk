@@ -17,6 +17,8 @@
 #include "vue_demineur.h"
 #include "controleur_demineur.h"
 
+static GtkWidget *charge_image_bouton(void);
+
 
 GtkWidget *creation_fenetre(void){
     GtkWidget *pFenetre = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -120,7 +122,7 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain){
     gtk_box_pack_start(GTK_BOX(pVBox), pBarre_menu, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pVBox), pHBox_info, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_nbr_mine, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(pHBox_info), pButton_new_game, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(pHBox_info), pButton_new_game, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_timer, TRUE, TRUE, 0);
     
     for (int i = 0; i < nombre_ligne; i++){
@@ -128,12 +130,35 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain){
         gtk_box_pack_start(GTK_BOX(pVBox), pHBox_champ_mine[i], TRUE, TRUE, 0);
         for(int j=0; j<nombre_colonne; j++){
             sprintf(texte, "%hd", get_mine(get_elem_champ_mine(terrain, i, j)));
-            pButton[i][j]=gtk_button_new_with_label(texte);
+            pButton[i][j]=gtk_button_new();
             gtk_widget_set_size_request(pButton[i][j], 20, 20);
             gtk_box_pack_start(GTK_BOX(pHBox_champ_mine[i]), pButton[i][j], TRUE, TRUE, 0);
+            g_signal_connect(G_OBJECT(pButton[i][j]), "clicked", G_CALLBACK(click_decouvre_case), (gpointer)terrain);
         }
     }
     
     return pVBox;
 }
 
+static GtkWidget *charge_image_bouton(void){
+    GtkWidget *pBouton;
+    GdkPixbuf *pb_temp, *pb;
+    GtkWidget *image;
+    
+    // 1. Charger l’image et la redimensionner (100*100 pixels)
+    pb_temp = gdk_pixbuf_new_from_file(".png", NULL);
+    if(pb_temp == NULL)
+    {
+        printf(" Erreur de chargement de l’image logo-ok-png-6.png!\n");
+        return NULL;
+    }
+    pb = gdk_pixbuf_scale_simple(pb_temp, 20, 20, GDK_INTERP_NEAREST);
+    
+    // 2. Créer le bouton
+    pBouton = gtk_button_new();
+    // 3. Placer l’image
+    image = gtk_image_new_from_pixbuf(pb);
+    gtk_button_set_image(GTK_BUTTON(pBouton), image);
+    
+    return pBouton;
+} // fin charge_image_bouton()

@@ -55,8 +55,15 @@ void click_difficulte_expert(GtkWidget *pButton, gpointer data){
     gtk_widget_show_all(get_fenetre(terrain));
     gtk_container_foreach (GTK_CONTAINER (get_fenetre(terrain)), (GtkCallback) gtk_widget_destroy, NULL);
     gtk_container_add(GTK_CONTAINER(get_fenetre(terrain)), pVBox);
-    gtk_window_resize(GTK_WINDOW(get_fenetre(terrain)), 1000,1040);
+    gtk_window_resize(GTK_WINDOW(get_fenetre(terrain)), 1000, 1040);
     gtk_widget_show_all(get_fenetre(terrain));
+}
+
+void click_decouvre_case(GtkWidget *pButton, gpointer data){
+    assert(data!=NULL);
+    pButton+=0;
+
+    
 }
 
 

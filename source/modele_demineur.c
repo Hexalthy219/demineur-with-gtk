@@ -82,79 +82,81 @@ void aleatoire_bombe_et_compteur(Terrain *terrain_de_jeu){
     }
 }
 
-void verife_bombe_dans_ta_mere(Terrain *terrain_de_jeu, unsigned short ligne, unsigned short colonne){
+void decouvre_boite(Terrain *terrain_de_jeu, unsigned short ligne, unsigned short colonne){
     assert(terrain_de_jeu != NULL);
-    // if(!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)) > 0){
-    //    set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne), 1);
-    //     //affiche l'image démerde toi
-    // }
-    if (!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && !(get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)))){
+    
+    if(!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)) > 0){
+       set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne), 1);
+        //affiche l'image démerde toi
+    }
+    else if (!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && !(get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)))){
         //affiche cette case en blanc
         set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne), 1);
         unsigned short colonne_max = get_ligne(get_regle(terrain_de_jeu)) - 1;
         unsigned short ligne_max = get_colonne(get_regle(terrain_de_jeu)) - 1;
         if(ligne == 0){
-            verife_bombe_dans_ta_mere(terrain_de_jeu, ligne+1, colonne);
+            decouvre_boite(terrain_de_jeu, ligne+1, colonne);
             if(colonne == 0){
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne, colonne+1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne+1, colonne+1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne+1);
+                decouvre_boite(terrain_de_jeu, ligne+1, colonne+1);
             }
             else if(colonne == colonne_max){
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne, colonne-1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne+1, colonne-1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
+                decouvre_boite(terrain_de_jeu, ligne+1, colonne-1);
             }
             else{
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne, colonne-1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne+1, colonne-1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne, colonne + 1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne+1, colonne+1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
+                decouvre_boite(terrain_de_jeu, ligne+1, colonne-1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne + 1);
+                decouvre_boite(terrain_de_jeu, ligne+1, colonne+1);
             }
         }
         else if(ligne == ligne_max){
-            verife_bombe_dans_ta_mere(terrain_de_jeu, ligne-1, colonne);
+            decouvre_boite(terrain_de_jeu, ligne-1, colonne);
             if (colonne == 0)
             {
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne, colonne+1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne-1, colonne+1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne+1);
+                decouvre_boite(terrain_de_jeu, ligne-1, colonne+1);
             }
             else if (colonne == colonne_max)
             {
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne, colonne-1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne-1, colonne-1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
+                decouvre_boite(terrain_de_jeu, ligne-1, colonne-1);
             }
             else
             {
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne, colonne-1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne-1, colonne -1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne, colonne+1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne-1, colonne+1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
+                decouvre_boite(terrain_de_jeu, ligne-1, colonne -1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne+1);
+                decouvre_boite(terrain_de_jeu, ligne-1, colonne+1);
             }
         }
         else
         {
-            verife_bombe_dans_ta_mere(terrain_de_jeu, ligne-1, colonne);
-            verife_bombe_dans_ta_mere(terrain_de_jeu, ligne+1, colonne);
+            decouvre_boite(terrain_de_jeu, ligne-1, colonne);
+            decouvre_boite(terrain_de_jeu, ligne+1, colonne);
             if(colonne == 0){
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne-1, colonne+1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne, colonne+1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne+1, colonne+1);
+                decouvre_boite(terrain_de_jeu, ligne-1, colonne+1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne+1);
+                decouvre_boite(terrain_de_jeu, ligne+1, colonne+1);
             }
             else if(colonne == colonne_max){
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne-1, colonne-1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne, colonne-1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne+1, colonne-1);
+                decouvre_boite(terrain_de_jeu, ligne-1, colonne-1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
+                decouvre_boite(terrain_de_jeu, ligne+1, colonne-1);
             }
             else{
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne-1, colonne-1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne, colonne-1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne+1, colonne-1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne-1, colonne+1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne, colonne+1);
-                verife_bombe_dans_ta_mere(terrain_de_jeu, ligne+1, colonne+1);
+                decouvre_boite(terrain_de_jeu, ligne-1, colonne-1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
+                decouvre_boite(terrain_de_jeu, ligne+1, colonne-1);
+                decouvre_boite(terrain_de_jeu, ligne-1, colonne+1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne+1);
+                decouvre_boite(terrain_de_jeu, ligne+1, colonne+1);
             }
         }
         
     }
+    else if (!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)) == -1)
 }
 
 static void actualise_compteur_autour_de_bombe(Terrain *terrain_de_jeu, unsigned short i, unsigned short j, unsigned short ligne_max, unsigned short colonne_max){
@@ -272,7 +274,7 @@ void mode_intermediaire(Terrain * terrain_de_jeu){
     set_ligne(get_regle(terrain_de_jeu), NBR_LIGNE_INTERMEDIAIRE);
     set_colonne(get_regle(terrain_de_jeu), NBR_COLONNE_INTERMEDIAIRE);
     set_temps(get_regle(terrain_de_jeu), TEMPS_INTERMEDIAIRE);
-    set_nombre_mine(get_regle(terrain_de_jeu), NBR_COLONNE_INTERMEDIAIRE);
+    set_nombre_mine(get_regle(terrain_de_jeu), NBR_MINE_INTERMEDIAIRE);
     set_champ_mine(terrain_de_jeu, constructeur_champ_mine(get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu))));
     initialisation_champ_mine(terrain_de_jeu);
 }

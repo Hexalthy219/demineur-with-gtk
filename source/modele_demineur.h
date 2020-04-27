@@ -51,7 +51,7 @@ void aleatoire_bombe_et_compteur(Terrain *terrain_de_jeu);
  * \param colonne La colonne où on fait le test 
  * 
  */
-void verife_bombe_dans_ta_mere(Terrain *terrain_de_jeu, unsigned short ligne, unsigned short colonne);
+void decouvre_boite(Terrain *terrain_de_jeu, unsigned short ligne, unsigned short colonne);
 
 /**
  * \fn mode_debutant(Terrain *terrain_de_jeu)
