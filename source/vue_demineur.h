@@ -11,4 +11,6 @@
 #ifndef __VUE_DEMINEUR__
 #define __VUE_DEMINEUR__
 
+GtkWidget *creation_fenetre(void);
+
 #endif

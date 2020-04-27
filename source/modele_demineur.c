@@ -41,15 +41,13 @@ void aleatoire_bombe_et_compteur(Terrain *terrain_de_jeu){
     unsigned short nbr_mine = get_nombre_mine(get_regle(terrain_de_jeu));
     unsigned short colonne_max = get_ligne(get_regle(terrain_de_jeu));
     unsigned short ligne_max = get_colonne(get_regle(terrain_de_jeu)), i, j;
-    int compteur =0;
+    int compteur = 0;
 
     
 
     for(unsigned short k = 0; k < nbr_mine;){
         i = rand()%ligne_max;
         j = rand()%colonne_max;
-        compteur++;
-        printf("%d\n", compteur);
 
         if(get_mine(get_elem_champ_mine(terrain_de_jeu, i, j)) >= 0){
             set_mine(get_elem_champ_mine(terrain_de_jeu, i, j), -1);

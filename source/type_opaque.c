@@ -167,6 +167,7 @@ Regle *constructeur_Regle(void){
 void destructeur_Regle(Regle *regle){
     if(regle!=NULL)
         free(regle);
+    regle==NULL;
 }
 
 short get_mine(Boite *recup){

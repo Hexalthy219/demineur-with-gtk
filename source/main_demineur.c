@@ -26,7 +26,7 @@
 int main(int argc, char **argv){
     char *optstring = "l:h:t:m:H";
     Regle *recup_arg = constructeur_Regle();
-    int val, recup;
+    int val, recup, recup_nbr_mine;
     
     set_ligne(recup_arg, NBR_LIGNE_DEFAULT);
     set_colonne(recup_arg, NBR_COLONNE_DEFAULT);
@@ -53,10 +53,7 @@ int main(int argc, char **argv){
                 set_temps(recup_arg, (unsigned short)recup);
             break;
         case 'm':
-            recup = atoi(optarg);
-            
-            if(recup>=10 && (unsigned short)recup<=(get_colonne(recup_arg)*get_ligne(recup_arg)))
-                set_nombre_mine(recup_arg, (unsigned short)recup);
+            recup_nbr_mine = atoi(optarg);
             break;
         case 'H':
             printf("usage : ./demineur [-l <nombre ligne>] [-h <nombre colonne>] [-t <temps>] [-m <nombre mine>] [-H]\n\n");
@@ -73,14 +70,15 @@ int main(int argc, char **argv){
         }
     }
 
+    if(recup_nbr_mine>=10 && (unsigned short)recup_nbr_mine<=(get_colonne(recup_arg)*get_ligne(recup_arg)))
+        set_nombre_mine(recup_arg, (unsigned short)recup_nbr_mine);
+
     Terrain *terrain = constructeur_Terrain(get_ligne(recup_arg), get_colonne(recup_arg), get_temps(recup_arg), get_nombre_mine(recup_arg));
     destructeur_Regle(recup_arg);
     if (terrain==NULL)
         return EXIT_FAILURE;
     
-    printf("bite\n");
     initialisation_champ_mine(terrain);
-    printf("couille\n");
 
     char texte_nbr_mine[4], texte[4];
 
@@ -90,6 +88,7 @@ int main(int argc, char **argv){
     GtkWidget *pHBox_champ_mine[get_ligne(get_regle(terrain))];
     GtkWidget *pButton[get_ligne(get_regle(terrain))][get_colonne(get_regle(terrain))];
     sprintf(texte_nbr_mine, "%hu", get_nombre_mine(get_regle(terrain)));
+    GtkWidget *pButton_new_game = gtk_button_new_with_label("O");
     GtkWidget *pLabel_nbr_mine = gtk_label_new(texte_nbr_mine);
     GtkWidget *pLabel_timer = gtk_label_new("60");
 
@@ -97,8 +96,7 @@ int main(int argc, char **argv){
     gtk_init(&argc, &argv);
 
     //création de la fenêtre
-    pFenetre = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(pFenetre), "Démineur");
+    pFenetre = creation_fenetre();
     
     g_signal_connect(G_OBJECT(pFenetre), "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
@@ -106,6 +104,7 @@ int main(int argc, char **argv){
     pHBox_info = gtk_hbox_new(TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pVBox), pHBox_info, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_nbr_mine, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(pHBox_info), pButton_new_game, TRUE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_timer, TRUE, TRUE, 0);
     int nombre_ligne = get_ligne(get_regle(terrain)), nombre_colonne = get_colonne(get_regle(terrain));
     for (int i = 0; i < nombre_ligne; i++){
