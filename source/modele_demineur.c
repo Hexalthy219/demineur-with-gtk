@@ -16,6 +16,21 @@
 #include "modele_demineur.h"
 #include "type_opaque.h"
 
+#define NBR_MINE_DEBUTANT 10
+#define TEMPS_DEBUTANT 60
+#define NBR_LIGNE_DEBUTANT 10
+#define NBR_COLONNE_DEBUTANT 10
+
+#define NBR_MINE_INTERMEDIAIRE 40
+#define TEMPS_INTERMEDIAIRE 180
+#define NBR_LIGNE_INTERMEDIAIRE 20
+#define NBR_COLONNE_INTERMEDIAIRE 20
+
+#define NBR_MINE_EXPERT 90
+#define TEMPS_EXPERT 300
+#define NBR_LIGNE_EXPERT 30
+#define NBR_COLONNE_EXPERT 30
+
 static void actualise_compteur_autour_de_bombe(Terrain *Terrain_de_jeu, unsigned short i, unsigned short j, unsigned short ligne_max, unsigned short colonne_max);
 
 void initialisation_champ_mine(Terrain *terrain_de_jeu){
@@ -246,30 +261,30 @@ static void actualise_compteur_autour_de_bombe(Terrain *terrain_de_jeu, unsigned
 
 void mode_debutant(Terrain *terrain_de_jeu){
     destructeur_champ_mine(get_champ_mine(terrain_de_jeu), get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu)));
-    set_ligne(get_regle(terrain_de_jeu), 10);
-    set_colonne(get_regle(terrain_de_jeu), 10);
-    set_temps(get_regle(terrain_de_jeu), 60);
-    set_nombre_mine(get_regle(terrain_de_jeu), 10);
+    set_ligne(get_regle(terrain_de_jeu), NBR_LIGNE_DEBUTANT);
+    set_colonne(get_regle(terrain_de_jeu), NBR_COLONNE_DEBUTANT);
+    set_temps(get_regle(terrain_de_jeu), TEMPS_DEBUTANT);
+    set_nombre_mine(get_regle(terrain_de_jeu), NBR_MINE_DEBUTANT);
     set_champ_mine(terrain_de_jeu, constructeur_champ_mine(get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu))));
     initialisation_champ_mine(terrain_de_jeu);
 }
 
 void mode_intermediaire(Terrain * terrain_de_jeu){
     destructeur_champ_mine(get_champ_mine(terrain_de_jeu), get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu)));
-    set_ligne(get_regle(terrain_de_jeu), 20);
-    set_colonne(get_regle(terrain_de_jeu), 20);
-    set_temps(get_regle(terrain_de_jeu), 180);
-    set_nombre_mine(get_regle(terrain_de_jeu), 40);
+    set_ligne(get_regle(terrain_de_jeu), NBR_LIGNE_INTERMEDIAIRE);
+    set_colonne(get_regle(terrain_de_jeu), NBR_COLONNE_INTERMEDIAIRE);
+    set_temps(get_regle(terrain_de_jeu), TEMPS_INTERMEDIAIRE);
+    set_nombre_mine(get_regle(terrain_de_jeu), NBR_COLONNE_INTERMEDIAIRE);
     set_champ_mine(terrain_de_jeu, constructeur_champ_mine(get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu))));
     initialisation_champ_mine(terrain_de_jeu);
 }
 
 void mode_expert(Terrain *terrain_de_jeu){
     destructeur_champ_mine(get_champ_mine(terrain_de_jeu), get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu)));
-    set_ligne(get_regle(terrain_de_jeu), 30);
-    set_colonne(get_regle(terrain_de_jeu), 30);
-    set_temps(get_regle(terrain_de_jeu), 300);
-    set_nombre_mine(get_regle(terrain_de_jeu), 90);
+    set_ligne(get_regle(terrain_de_jeu), NBR_LIGNE_EXPERT);
+    set_colonne(get_regle(terrain_de_jeu), NBR_COLONNE_EXPERT);
+    set_temps(get_regle(terrain_de_jeu), TEMPS_EXPERT);
+    set_nombre_mine(get_regle(terrain_de_jeu), NBR_MINE_EXPERT);
     set_champ_mine(terrain_de_jeu, constructeur_champ_mine(get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu))));
     initialisation_champ_mine(terrain_de_jeu);
 }
