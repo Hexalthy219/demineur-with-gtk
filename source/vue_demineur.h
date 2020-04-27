@@ -13,4 +13,6 @@
 
 GtkWidget *creation_fenetre(void);
 
+GtkWidget *creer_menus(GtkWidget *pFenetre);
+
 #endif
