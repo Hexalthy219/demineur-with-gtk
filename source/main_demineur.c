@@ -87,6 +87,7 @@ int main(int argc, char **argv){
     sprintf(texte_nbr_mine, "%hu", get_nombre_mine(get_regle(terrain)));
     GtkWidget *pLabel_nbr_mine = gtk_label_new(texte_nbr_mine);
     GtkWidget *pLabel_timer = gtk_label_new("60");
+    GtkWidget *pBarre_menu;
 
 
     gtk_init(&argc, &argv);
@@ -99,6 +100,8 @@ int main(int argc, char **argv){
 
     pVBox = gtk_vbox_new(TRUE, 0);
     pHBox_info = gtk_hbox_new(TRUE, 0);
+    pBarre_menu = creer_menus(pFenetre);
+    gtk_box_pack_start(GTK_BOX(pVBox), pBarre_menu, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pVBox), pHBox_info, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_nbr_mine, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_timer, TRUE, TRUE, 0);
