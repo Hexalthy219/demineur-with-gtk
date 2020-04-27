@@ -15,7 +15,7 @@
 
 GtkWidget *creation_fenetre(void);
 
-GtkWidget *creation_menus(GtkWidget *pFenetre);
+GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain);
 
 GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain);
 

@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <gtk/gtk.h>
 
 #include "type_opaque.h"
 
@@ -29,7 +30,9 @@ struct Regle_t{
 struct Terrain_t{
     Boite ***champ_mine;
     Regle *regle;
+    GtkWidget *pFenetre;
 };
+
 
 Terrain *constructeur_Terrain(unsigned short ligne, unsigned short colonne, unsigned short temps, unsigned short nombre_mine){
     Terrain *terrain = malloc(sizeof(Terrain));
@@ -66,10 +69,23 @@ void destructeur_Terrain(Terrain *terrain){
     free(terrain);
 }
 
+GtkWidget *get_fenetre(Terrain *terrain){
+    assert(terrain!=NULL);
+
+    return terrain->pFenetre;
+}
+
+void set_fenetre(Terrain *terrain, GtkWidget *pFenetre){
+    assert(terrain!=NULL && pFenetre!=NULL);
+
+    terrain->pFenetre = pFenetre;
+}
+
 Boite ***get_champ_mine(Terrain *recup){
     assert(recup!=NULL);
     return recup->champ_mine;
 }
+
 Boite *get_elem_champ_mine(Terrain *recup, unsigned int i, unsigned int j){
     assert(recup!=NULL);
     return recup->champ_mine[i][j];
@@ -77,9 +93,9 @@ Boite *get_elem_champ_mine(Terrain *recup, unsigned int i, unsigned int j){
 
 void set_champ_mine(Terrain *change, Boite ***champ_mine){
     assert(change!=NULL && champ_mine!=NULL);
-    destructeur_champ_mine(change->champ_mine, change->regle->ligne, change->regle->colonne);
     change->champ_mine = champ_mine;
 }
+
 void set_elem_champ_mine(Terrain *change, Boite *mine, unsigned int i, unsigned int j){
     assert(change!=NULL);
     change->champ_mine[i][j] = mine; 
@@ -89,6 +105,7 @@ Regle *get_regle(Terrain *recup){
     assert(recup!=NULL);
     return recup->regle;
 }
+
 void set_regle(Terrain *change, Regle *regle){
     assert(change!=NULL && regle!=NULL);
     change->regle = regle;
@@ -195,7 +212,7 @@ void set_Boite_decouverte(Boite *change, short boite_decouverte){
 }//fin set_Boite_decouverte
 
 short get_Boite_deja_decouverte(Boite *recup){
-    assert(recup != NULL)
+    assert(recup != NULL);
     return recup->boite_deja_decouverte;
 }
 
@@ -203,6 +220,7 @@ void set_Boite_deja_decouverte(Boite *change, short boite_deja_decouverte){
     assert(change != NULL);
     change->boite_deja_decouverte = boite_deja_decouverte;
 }
+
 unsigned short get_ligne(Regle *recup){
     assert(recup!=NULL);
 
@@ -250,5 +268,6 @@ void set_nombre_mine(Regle *change, unsigned short nombre_mine){
 
     change->nombre_mine = nombre_mine;
 }//fin set_nombre_mine
+
 
 

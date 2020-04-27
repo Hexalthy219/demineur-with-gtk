@@ -13,34 +13,30 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
+#include "modele_demineur.h"
 #include "vue_demineur.h"
+#include "controleur_demineur.h"
 
 
 GtkWidget *creation_fenetre(void){
     GtkWidget *pFenetre = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(pFenetre), "Démineur");
+    gtk_window_set_default_size(GTK_WINDOW(pFenetre), 1000, 1000);
     return pFenetre;
 }
 
-GtkWidget *creation_menus(GtkWidget *pFenetre){
+GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain){
     //Déclaration des variables
     GtkWidget *barre_menu;
 
     GtkWidget *menu_partie;
-    GtkWidget *item_partie;
-    GtkWidget *item_nouveau;
-    GtkWidget *item_separateur;
-    GtkWidget *item_quitter;
+    GtkWidget *item_partie, *item_nouveau, *item_separateur, *item_quitter;
 
     GtkWidget *menu_niveau;
-    GtkWidget *item_niveau;
-    GtkWidget *item_niveau_debutant;
-    GtkWidget *item_niveau_intermediaire;
-    GtkWidget *item_niveau_expert;
+    GtkWidget *item_niveau, *item_niveau_debutant, *item_niveau_intermediaire, *item_niveau_expert; 
 
     GtkWidget *menu_aide;
-    GtkWidget *item_aide;
-    GtkWidget *item_info_createur;
+    GtkWidget *item_aide, *item_info_createur;
     
     GtkAccelGroup *accelerateur = NULL;
 
@@ -92,11 +88,52 @@ GtkWidget *creation_menus(GtkWidget *pFenetre){
 
     //les signaux
     g_signal_connect(G_OBJECT(item_quitter), "activate", G_CALLBACK(gtk_main_quit), NULL);
+    g_signal_connect(G_OBJECT(item_niveau_debutant), "activate", G_CALLBACK(click_difficulte_debutant), (gpointer)terrain);
+    g_signal_connect(G_OBJECT(item_niveau_intermediaire), "activate", G_CALLBACK(click_difficulte_intermediaire), (gpointer)terrain);
+    g_signal_connect(G_OBJECT(item_niveau_expert), "activate", G_CALLBACK(click_difficulte_expert), (gpointer)terrain);
+
 
     return barre_menu;
 }
 
 GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain){
+    char texte_nbr_mine[4], texte[4];
+    int nombre_ligne = get_ligne(get_regle(terrain)), nombre_colonne = get_colonne(get_regle(terrain));
+   
+    //Initialisation box
+    GtkWidget *pVBox = gtk_vbox_new(TRUE, 0);
+    GtkWidget *pHBox_info = gtk_hbox_new(TRUE, 0);
+    GtkWidget *pHBox_champ_mine[get_ligne(get_regle(terrain))];
+
+    //Initialisation boutons
+    GtkWidget *pButton[get_ligne(get_regle(terrain))][get_colonne(get_regle(terrain))];
+    sprintf(texte_nbr_mine, "%hu", get_nombre_mine(get_regle(terrain)));
+    GtkWidget *pButton_new_game = gtk_button_new_with_label("O");
+
+    //Initialisation labels
+    GtkWidget *pLabel_nbr_mine = gtk_label_new(texte_nbr_mine);
+    GtkWidget *pLabel_timer = gtk_label_new("60");
+
+    //Initialisation barre menu
+    GtkWidget *pBarre_menu = creation_menus(pFenetre, terrain);
+
+    gtk_box_pack_start(GTK_BOX(pVBox), pBarre_menu, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(pVBox), pHBox_info, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_nbr_mine, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(pHBox_info), pButton_new_game, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_timer, TRUE, TRUE, 0);
     
+    for (int i = 0; i < nombre_ligne; i++){
+        pHBox_champ_mine[i]=gtk_hbox_new(TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(pVBox), pHBox_champ_mine[i], TRUE, TRUE, 0);
+        for(int j=0; j<nombre_colonne; j++){
+            sprintf(texte, "%hd", get_mine(get_elem_champ_mine(terrain, i, j)));
+            pButton[i][j]=gtk_button_new_with_label(texte);
+            gtk_widget_set_size_request(pButton[i][j], 20, 20);
+            gtk_box_pack_start(GTK_BOX(pHBox_champ_mine[i]), pButton[i][j], TRUE, TRUE, 0);
+        }
+    }
+    
+    return pVBox;
 }
 

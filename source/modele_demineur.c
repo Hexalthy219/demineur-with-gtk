@@ -42,19 +42,20 @@ void initialisation_champ_mine(Terrain *terrain_de_jeu){
 
 void initialisation_mine_0(Terrain *terrain_de_jeu){
     assert(terrain_de_jeu != NULL);
-    unsigned short colonne_max = get_ligne(get_regle(terrain_de_jeu));
-    unsigned short ligne_max = get_colonne(get_regle(terrain_de_jeu));
+    unsigned short colonne_max = get_colonne(get_regle(terrain_de_jeu));
+    unsigned short ligne_max = get_ligne(get_regle(terrain_de_jeu));
 
     for(int i = 0; i<ligne_max; i++){
         for(int j = 0; j<colonne_max; j++){
             set_mine(get_elem_champ_mine(terrain_de_jeu, i, j), 0);
         }
     }
+
 }
 
 void initialisation_case_decouvert_0(Terrain *terrain_de_jeu){
     assert(terrain_de_jeu != NULL);
-    unsigned short colonne_max = get_ligne(get_regle(terrain_de_jeu)), ligne_max = get_colonne(get_regle(terrain_de_jeu));
+    unsigned short colonne_max = get_colonne(get_regle(terrain_de_jeu)), ligne_max = get_ligne(get_regle(terrain_de_jeu));
 
     for (int i = 0; i < ligne_max; i++){
         for (int j = 0; j < colonne_max; j++)
@@ -66,11 +67,8 @@ void aleatoire_bombe_et_compteur(Terrain *terrain_de_jeu){
     assert(terrain_de_jeu != NULL);
     srand(time(NULL));
     unsigned short nbr_mine = get_nombre_mine(get_regle(terrain_de_jeu));
-    unsigned short colonne_max = get_ligne(get_regle(terrain_de_jeu));
-    unsigned short ligne_max = get_colonne(get_regle(terrain_de_jeu)), i, j;
-    int compteur = 0;
-
-    
+    unsigned short colonne_max = get_colonne(get_regle(terrain_de_jeu));
+    unsigned short ligne_max = get_ligne(get_regle(terrain_de_jeu)), i, j;
 
     for(unsigned short k = 0; k < nbr_mine;){
         i = rand()%ligne_max;

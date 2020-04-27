@@ -11,6 +11,8 @@
 #ifndef __TYPE_OPAQUE__
 #define __TYPE_OPAQUE__
 
+#include <gtk/gtk.h>
+
 /**
  * \struct typedef struct Boite_t Boite
  * \brief Déclaration du type opaque Boite
@@ -33,6 +35,7 @@ typedef struct Regle_t Regle;
 typedef struct Terrain_t Terrain;
 
 
+
 /**
  * \fn cree_champ_mine(int ligne, int colonne)
  * \brief allocation d'un tableau de structure ******* reprenant les infos
@@ -51,6 +54,11 @@ typedef struct Terrain_t Terrain;
 Terrain *constructeur_Terrain(unsigned short ligne, unsigned short colonne, unsigned short temps, unsigned short nombre_mine);
 
 void destructeur_Terrain(Terrain *terrain);
+
+GtkWidget *get_fenetre(Terrain *terrain);
+
+void set_fenetre(Terrain *terrain, GtkWidget *pFenetre);
+
 Boite ***get_champ_mine(Terrain *recup);
 
 Boite *get_elem_champ_mine(Terrain *recup, unsigned int i, unsigned int j);
@@ -82,6 +90,10 @@ void set_mine(Boite *change, short mine);
 short get_Boite_decouverte(Boite *recup);
 
 void set_Boite_decouverte(Boite *change, short boite_decouverte);
+
+short get_Boite_deja_decouverte(Boite *recup);
+
+void set_Boite_deja_decouverte(Boite *change, short boite_deja_decouverte);
 
 unsigned short get_ligne(Regle *recup);
 
