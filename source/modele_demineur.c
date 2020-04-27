@@ -8,11 +8,13 @@
  * 
  */
 
-#include "modele_demineur.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 #include <assert.h>
+
+#include "modele_demineur.h"
+#include "type_opaque.h"
 
 static void actualise_compteur_autour_de_bombe(Terrain *Terrain_de_jeu, unsigned short i, unsigned short j, unsigned short ligne_max, unsigned short colonne_max);
 
@@ -242,3 +244,32 @@ static void actualise_compteur_autour_de_bombe(Terrain *terrain_de_jeu, unsigned
 
 }
 
+void mode_debutant(Terrain *terrain_de_jeu){
+    destructeur_champ_mine(get_champ_mine(terrain_de_jeu), get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu)));
+    set_ligne(get_regle(terrain_de_jeu), 10);
+    set_colonne(get_regle(terrain_de_jeu), 10);
+    set_temps(get_regle(terrain_de_jeu), 60);
+    set_nombre_mine(get_regle(terrain_de_jeu), 10);
+    set_champ_mine(terrain_de_jeu, constructeur_champ_mine(get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu))));
+    initialisation_champ_mine(terrain_de_jeu);
+}
+
+void mode_intermediaire(Terrain * terrain_de_jeu){
+    destructeur_champ_mine(get_champ_mine(terrain_de_jeu), get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu)));
+    set_ligne(get_regle(terrain_de_jeu), 20);
+    set_colonne(get_regle(terrain_de_jeu), 20);
+    set_temps(get_regle(terrain_de_jeu), 180);
+    set_nombre_mine(get_regle(terrain_de_jeu), 40);
+    set_champ_mine(terrain_de_jeu, constructeur_champ_mine(get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu))));
+    initialisation_champ_mine(terrain_de_jeu);
+}
+
+void mode_expert(Terrain *terrain_de_jeu){
+    destructeur_champ_mine(get_champ_mine(terrain_de_jeu), get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu)));
+    set_ligne(get_regle(terrain_de_jeu), 30);
+    set_colonne(get_regle(terrain_de_jeu), 30);
+    set_temps(get_regle(terrain_de_jeu), 300);
+    set_nombre_mine(get_regle(terrain_de_jeu), 90);
+    set_champ_mine(terrain_de_jeu, constructeur_champ_mine(get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu))));
+    initialisation_champ_mine(terrain_de_jeu);
+}

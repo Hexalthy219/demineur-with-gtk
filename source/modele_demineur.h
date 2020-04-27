@@ -53,5 +53,30 @@ void aleatoire_bombe_et_compteur(Terrain *terrain_de_jeu);
  */
 void verife_bombe_dans_ta_mere(Terrain *terrain_de_jeu, unsigned short ligne, unsigned short colonne);
 
+/**
+ * \fn mode_debutant(Terrain *terrain_de_jeu)
+ * \brief Change les valeurs dans le terrain de jeu pour le mettre en mode débutant
+ * 
+ * \param terrain_de_jeu La structure contenant toutes les informations du terrain
+ * 
+ */
+void mode_debutant(Terrain *terrain_de_jeu);
 
+/**
+ * \fn mode_intermediaire(Terrain *terrain_de_jeu)
+ * \brief Change les valeurs dans le terrain de jeu pour le mettre en mode intermediaire
+ * 
+ * \param terrain_de_jeu La structure contenant toutes les informations du terrain
+ * 
+ */
+void mode_intermediaire(Terrain *terrain_de_jeu);
+
+/**
+ * \fn mode_expert(Terrain *terrain_de_jeu)
+ * \brief Change les valeurs dans le terrain de jeu pour le mettre en mode expert
+ * 
+ * \param terrain_de_jeu La structure contenant toutes les informations du terrain
+ * 
+ */
+void mode_expert(Terrain *terrain_de_jeu);
 #endif
