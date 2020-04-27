@@ -17,7 +17,6 @@
 struct Boite_t{
     short mine;
     short boite_decouverte;
-    short boite_deja_decouverte;
 };
 
 struct Regle_t{
@@ -25,6 +24,7 @@ struct Regle_t{
     unsigned short colonne;
     unsigned short temps;
     unsigned short nombre_mine;
+    short boite_deja_decouverte;
 };
 
 struct Terrain_t{
@@ -211,12 +211,12 @@ void set_Boite_decouverte(Boite *change, short boite_decouverte){
     change->boite_decouverte = boite_decouverte;
 }//fin set_Boite_decouverte
 
-short get_Boite_deja_decouverte(Boite *recup){
+short get_Boite_deja_decouverte(Regle *recup){
     assert(recup != NULL);
     return recup->boite_deja_decouverte;
 }
 
-void set_Boite_deja_decouverte(Boite *change, short boite_deja_decouverte){
+void set_Boite_deja_decouverte(Regle *change, short boite_deja_decouverte){
     assert(change != NULL);
     change->boite_deja_decouverte = boite_deja_decouverte;
 }

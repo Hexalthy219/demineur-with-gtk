@@ -38,6 +38,7 @@ void initialisation_champ_mine(Terrain *terrain_de_jeu){
     initialisation_mine_0(terrain_de_jeu);
     aleatoire_bombe_et_compteur(terrain_de_jeu);
     initialisation_case_decouvert_0(terrain_de_jeu);
+    set_Boite_deja_decouverte(get_regle(terrain_de_jeu), 0);
 }
 
 void initialisation_mine_0(Terrain *terrain_de_jeu){
@@ -86,11 +87,13 @@ void decouvre_boite(Terrain *terrain_de_jeu, unsigned short ligne, unsigned shor
     assert(terrain_de_jeu != NULL);
     
     if(!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)) > 0){
+       set_Boite_deja_decouverte(get_regle(terrain_de_jeu), get_Boite_deja_decouverte(get_regle(terrain_de_jeu)) + 1);
        set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne), 1);
         //affiche l'image démerde toi
     }
     else if (!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && !(get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)))){
         //affiche cette case en blanc
+        set_Boite_deja_decouverte(get_regle(terrain_de_jeu), get_Boite_deja_decouverte(get_regle(terrain_de_jeu)) + 1);
         set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne), 1);
         unsigned short colonne_max = get_ligne(get_regle(terrain_de_jeu)) - 1;
         unsigned short ligne_max = get_colonne(get_regle(terrain_de_jeu)) - 1;
@@ -156,7 +159,9 @@ void decouvre_boite(Terrain *terrain_de_jeu, unsigned short ligne, unsigned shor
         }
         
     }
-    else if (!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)) == -1)
+    // else if (!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)) == -1){
+
+    // }
 }
 
 static void actualise_compteur_autour_de_bombe(Terrain *terrain_de_jeu, unsigned short i, unsigned short j, unsigned short ligne_max, unsigned short colonne_max){

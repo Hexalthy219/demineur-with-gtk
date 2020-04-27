@@ -91,9 +91,9 @@ short get_Boite_decouverte(Boite *recup);
 
 void set_Boite_decouverte(Boite *change, short boite_decouverte);
 
-short get_Boite_deja_decouverte(Boite *recup);
+short get_Boite_deja_decouverte(Regle *recup);
 
-void set_Boite_deja_decouverte(Boite *change, short boite_deja_decouverte);
+void set_Boite_deja_decouverte(Regle *change, short boite_deja_decouverte);
 
 unsigned short get_ligne(Regle *recup);
 
