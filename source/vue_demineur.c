@@ -14,7 +14,7 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "vue_demineur.h"
-#include "type_opaque.h"
+
 
 GtkWidget *creation_fenetre(void){
     GtkWidget *pFenetre = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -22,7 +22,7 @@ GtkWidget *creation_fenetre(void){
     return pFenetre;
 }
 
-GtkWidget *creer_menus(GtkWidget *pFenetre){
+GtkWidget *creation_menus(GtkWidget *pFenetre){
     //Déclaration des variables
     GtkWidget *barre_menu;
 
@@ -94,7 +94,9 @@ GtkWidget *creer_menus(GtkWidget *pFenetre){
     g_signal_connect(G_OBJECT(item_quitter), "activate", G_CALLBACK(gtk_main_quit), NULL);
 
     return barre_menu;
+}
 
-
+GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain){
+    
 }
 

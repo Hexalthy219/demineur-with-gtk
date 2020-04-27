@@ -20,8 +20,8 @@ void initialisation_champ_mine(Terrain *terrain_de_jeu){
     assert(terrain_de_jeu!=NULL);
     initialisation_mine_0(terrain_de_jeu);
     aleatoire_bombe_et_compteur(terrain_de_jeu);
+    initialisation_case_decouvert_0(terrain_de_jeu);
 }
-
 
 void initialisation_mine_0(Terrain *terrain_de_jeu){
     assert(terrain_de_jeu != NULL);
@@ -32,6 +32,16 @@ void initialisation_mine_0(Terrain *terrain_de_jeu){
         for(int j = 0; j<colonne_max; j++){
             set_mine(get_elem_champ_mine(terrain_de_jeu, i, j), 0);
         }
+    }
+}
+
+void initialisation_case_decouvert_0(Terrain *terrain_de_jeu){
+    assert(terrain_de_jeu != NULL);
+    unsigned short colonne_max = get_ligne(get_regle(terrain_de_jeu)), ligne_max = get_colonne(get_regle(terrain_de_jeu));
+
+    for (int i = 0; i < ligne_max; i++){
+        for (int j = 0; j < colonne_max; j++)
+            set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, i, j), 0);
     }
 }
 

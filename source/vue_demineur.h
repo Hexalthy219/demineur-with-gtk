@@ -11,8 +11,12 @@
 #ifndef __VUE_DEMINEUR__
 #define __VUE_DEMINEUR__
 
+#include "type_opaque.h"
+
 GtkWidget *creation_fenetre(void);
 
-GtkWidget *creer_menus(GtkWidget *pFenetre);
+GtkWidget *creation_menus(GtkWidget *pFenetre);
+
+GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain);
 
 #endif
