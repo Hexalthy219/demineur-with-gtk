@@ -89,7 +89,6 @@ int main(int argc, char **argv){
     gtk_init(&argc, &argv);
 
     pFenetre = creation_fenetre();
-    set_fenetre(terrain, pFenetre);
     g_signal_connect(G_OBJECT(pFenetre), "destroy", G_CALLBACK(gtk_main_quit), NULL);
     pVBox = structure_box(pFenetre, terrain);
     gtk_container_add(GTK_CONTAINER(pFenetre), pVBox);

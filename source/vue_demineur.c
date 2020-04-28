@@ -87,12 +87,12 @@ GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain){
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_aide), menu_aide);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu_aide), item_info_createur);
     gtk_menu_shell_append(GTK_MENU_SHELL(barre_menu), item_aide);
-
+    Data_for_Callback *data  = constructeur_Data_for_Callback(terrain, pFenetre);
     //les signaux
     g_signal_connect(G_OBJECT(item_quitter), "activate", G_CALLBACK(gtk_main_quit), NULL);
-    g_signal_connect(G_OBJECT(item_niveau_debutant), "activate", G_CALLBACK(click_difficulte_debutant), (gpointer)terrain);
-    g_signal_connect(G_OBJECT(item_niveau_intermediaire), "activate", G_CALLBACK(click_difficulte_intermediaire), (gpointer)terrain);
-    g_signal_connect(G_OBJECT(item_niveau_expert), "activate", G_CALLBACK(click_difficulte_expert), (gpointer)terrain);
+    g_signal_connect(G_OBJECT(item_niveau_debutant), "activate", G_CALLBACK(click_difficulte_debutant), (gpointer)data);
+    g_signal_connect(G_OBJECT(item_niveau_intermediaire), "activate", G_CALLBACK(click_difficulte_intermediaire), (gpointer)data);
+    g_signal_connect(G_OBJECT(item_niveau_expert), "activate", G_CALLBACK(click_difficulte_expert), (gpointer)data);
 
 
     return barre_menu;
@@ -125,6 +125,7 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain){
     gtk_box_pack_start(GTK_BOX(pHBox_info), pButton_new_game, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_timer, TRUE, TRUE, 0);
     
+    unsigned short tab_coord[2];
     for (int i = 0; i < nombre_ligne; i++){
         pHBox_champ_mine[i]=gtk_hbox_new(TRUE, 0);
         gtk_box_pack_start(GTK_BOX(pVBox), pHBox_champ_mine[i], TRUE, TRUE, 0);
@@ -133,7 +134,14 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain){
             pButton[i][j]=gtk_button_new();
             gtk_widget_set_size_request(pButton[i][j], 20, 20);
             gtk_box_pack_start(GTK_BOX(pHBox_champ_mine[i]), pButton[i][j], TRUE, TRUE, 0);
-            g_signal_connect(G_OBJECT(pButton[i][j]), "clicked", G_CALLBACK(click_decouvre_case), (gpointer)terrain);
+            Data_for_Callback *data = constructeur_Data_for_Callback(terrain, pFenetre);
+            tab_coord[0]=i;
+            tab_coord[1]=j;
+            printf("%hu %hu\n",tab_coord[0], tab_coord[1]);
+            set_coord_boutton(data, tab_coord);
+            g_signal_connect(G_OBJECT(pButton[i][j]), "clicked", G_CALLBACK(click_decouvre_case), (gpointer)data);
+            if(i!=(nombre_ligne-1) && j!=(nombre_colonne-1))
+                destructeur_Data_for_Callback(data);
         }
     }
     

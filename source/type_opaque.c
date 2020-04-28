@@ -30,9 +30,56 @@ struct Regle_t{
 struct Terrain_t{
     Boite ***champ_mine;
     Regle *regle;
-    GtkWidget *pFenetre;
 };
 
+struct Data_for_Callback_t{
+    Terrain *terrain;
+    GtkWidget *pFenetre;
+    unsigned short coord_boutton[2];
+};
+
+Data_for_Callback *constructeur_Data_for_Callback(Terrain *terrain, GtkWidget *pFenetre){
+    assert(terrain!=NULL && pFenetre!=NULL);
+
+    Data_for_Callback *data = malloc(sizeof(Data_for_Callback));
+    if(data==NULL)
+        return NULL;
+    
+    data->terrain = terrain;
+    data->pFenetre = pFenetre;
+
+    return data;
+}
+
+void destructeur_Data_for_Callback(Data_for_Callback *data){
+    if(data!=NULL)
+        free(data);
+}
+
+unsigned short *get_coord_boutton(Data_for_Callback *data){
+    assert(data!=NULL);
+
+    return data->coord_boutton;
+}
+
+void set_coord_boutton(Data_for_Callback *data, unsigned short coord[2]){
+    assert(data!=NULL && coord!=NULL);
+
+    data->coord_boutton[0] = coord[0];
+    data->coord_boutton[1] = coord[1];
+}
+
+Terrain *get_Terrain(Data_for_Callback *data){
+    assert(data!=NULL);
+
+    return data->terrain;
+}
+
+GtkWidget *get_fenetre(Data_for_Callback *data){
+    assert(data!=NULL);
+
+    return data->pFenetre;
+}
 
 Terrain *constructeur_Terrain(unsigned short ligne, unsigned short colonne, unsigned short temps, unsigned short nombre_mine){
     Terrain *terrain = malloc(sizeof(Terrain));
@@ -67,18 +114,6 @@ void destructeur_Terrain(Terrain *terrain){
         destructeur_champ_mine(terrain->champ_mine, terrain->regle->ligne, terrain->regle->colonne);
     destructeur_Regle(terrain->regle);
     free(terrain);
-}
-
-GtkWidget *get_fenetre(Terrain *terrain){
-    assert(terrain!=NULL);
-
-    return terrain->pFenetre;
-}
-
-void set_fenetre(Terrain *terrain, GtkWidget *pFenetre){
-    assert(terrain!=NULL && pFenetre!=NULL);
-
-    terrain->pFenetre = pFenetre;
 }
 
 Boite ***get_champ_mine(Terrain *recup){

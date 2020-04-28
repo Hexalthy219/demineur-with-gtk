@@ -34,7 +34,24 @@ typedef struct Regle_t Regle;
  */
 typedef struct Terrain_t Terrain;
 
+/**
+ * \struct typedef struct Data_for_Callback_t Data_for_Callback
+ * \brief Déclaration du type opaque Data_for_Callback
+ *
+ */
+typedef struct Data_for_Callback_t Data_for_Callback;
 
+Data_for_Callback *constructeur_Data_for_Callback(Terrain *terrain, GtkWidget *pFenetre);
+
+void destructeur_Data_for_Callback(Data_for_Callback *data);
+
+Terrain *get_Terrain(Data_for_Callback *data);
+
+GtkWidget *get_fenetre(Data_for_Callback *data);
+
+unsigned short *get_coord_boutton(Data_for_Callback *data);
+
+void set_coord_boutton(Data_for_Callback *data, unsigned short coord[2]);
 
 /**
  * \fn cree_champ_mine(int ligne, int colonne)
@@ -54,10 +71,6 @@ typedef struct Terrain_t Terrain;
 Terrain *constructeur_Terrain(unsigned short ligne, unsigned short colonne, unsigned short temps, unsigned short nombre_mine);
 
 void destructeur_Terrain(Terrain *terrain);
-
-GtkWidget *get_fenetre(Terrain *terrain);
-
-void set_fenetre(Terrain *terrain, GtkWidget *pFenetre);
 
 Boite ***get_champ_mine(Terrain *recup);
 
