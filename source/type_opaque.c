@@ -30,12 +30,13 @@ struct Regle_t{
 struct Terrain_t{
     Boite ***champ_mine;
     Regle *regle;
+    GtkWidget ***pTableau_bouton;
 };
 
 struct Data_for_Callback_t{
     Terrain *terrain;
     GtkWidget *pFenetre;
-    unsigned short coord_boutton[2];
+    unsigned int coord_boutton[2];
 };
 
 Data_for_Callback *constructeur_Data_for_Callback(Terrain *terrain, GtkWidget *pFenetre){
@@ -49,37 +50,37 @@ Data_for_Callback *constructeur_Data_for_Callback(Terrain *terrain, GtkWidget *p
     data->pFenetre = pFenetre;
 
     return data;
-}
+}//fin constructeur_Data_for_Callback
 
 void destructeur_Data_for_Callback(Data_for_Callback *data){
     if(data!=NULL)
         free(data);
-}
+}//fin destructeur_Data_for_Callback
 
-unsigned short *get_coord_boutton(Data_for_Callback *data){
+unsigned int *get_coord_boutton(Data_for_Callback *data){
     assert(data!=NULL);
 
     return data->coord_boutton;
-}
+}//fin get_coord_boutton
 
-void set_coord_boutton(Data_for_Callback *data, unsigned short coord[2]){
+void set_coord_boutton(Data_for_Callback *data, unsigned int coord[2]){
     assert(data!=NULL && coord!=NULL);
 
     data->coord_boutton[0] = coord[0];
     data->coord_boutton[1] = coord[1];
-}
+}//fin set_coord_boutton
 
 Terrain *get_Terrain(Data_for_Callback *data){
     assert(data!=NULL);
 
     return data->terrain;
-}
+}//fin get_Terrain
 
 GtkWidget *get_fenetre(Data_for_Callback *data){
     assert(data!=NULL);
 
     return data->pFenetre;
-}
+}//fin get_fenetre
 
 Terrain *constructeur_Terrain(unsigned short ligne, unsigned short colonne, unsigned short temps, unsigned short nombre_mine){
     Terrain *terrain = malloc(sizeof(Terrain));
@@ -114,36 +115,54 @@ void destructeur_Terrain(Terrain *terrain){
         destructeur_champ_mine(terrain->champ_mine, terrain->regle->ligne, terrain->regle->colonne);
     destructeur_Regle(terrain->regle);
     free(terrain);
-}
+}//fin destructeur_Terrain
 
 Boite ***get_champ_mine(Terrain *recup){
     assert(recup!=NULL);
     return recup->champ_mine;
-}
+}//fin get_champ_mine
 
 Boite *get_elem_champ_mine(Terrain *recup, unsigned int i, unsigned int j){
     assert(recup!=NULL);
     return recup->champ_mine[i][j];
-}
+}//fin get_elem_champ_mine
 
 void set_champ_mine(Terrain *change, Boite ***champ_mine){
     assert(change!=NULL && champ_mine!=NULL);
     change->champ_mine = champ_mine;
-}
+}//fin set_champ_mine
 
 void set_elem_champ_mine(Terrain *change, Boite *mine, unsigned int i, unsigned int j){
     assert(change!=NULL);
     change->champ_mine[i][j] = mine; 
-}
+}//fin set_elem_champ_mine
 
 Regle *get_regle(Terrain *recup){
     assert(recup!=NULL);
     return recup->regle;
-}
+}//fin get_regle
 
 void set_regle(Terrain *change, Regle *regle){
     assert(change!=NULL && regle!=NULL);
     change->regle = regle;
+}//fin set_regle
+
+GtkWidget ***get_tableau_bouton(Terrain *recup){
+    assert(recup!=NULL);
+
+    return recup->pTableau_bouton;
+}
+
+GtkWidget *get_bouton(Terrain *terrain, unsigned int ligne, unsigned int colonne){
+    assert(terrain!=NULL);
+
+    return terrain->pTableau_bouton[ligne][colonne];
+}
+
+void set_tableau_bouton(Terrain *change, GtkWidget ***tableau_bouton){
+    assert(change!=NULL && tableau_bouton!=NULL);
+
+    change->pTableau_bouton = tableau_bouton;
 }
 
 Boite ***constructeur_champ_mine(unsigned short ligne, unsigned short colonne){
@@ -215,12 +234,12 @@ Regle *constructeur_Regle(void){
     Regle *regle = malloc(sizeof(Regle));
 
     return regle;
-}
+}//fin constructeur_Regle
 
 void destructeur_Regle(Regle *regle){
     if(regle!=NULL)
         free(regle);
-}
+}//fin destructeur_Regle
 
 short get_mine(Boite *recup){
     assert(recup!=NULL);
@@ -249,12 +268,12 @@ void set_Boite_decouverte(Boite *change, short boite_decouverte){
 short get_Boite_deja_decouverte(Regle *recup){
     assert(recup != NULL);
     return recup->boite_deja_decouverte;
-}
+}//fin get_Boite_deja_decouverte
 
 void set_Boite_deja_decouverte(Regle *change, short boite_deja_decouverte){
     assert(change != NULL);
     change->boite_deja_decouverte = boite_deja_decouverte;
-}
+}//fin set_Boite_deja_decouverte
 
 unsigned short get_ligne(Regle *recup){
     assert(recup!=NULL);
@@ -303,6 +322,3 @@ void set_nombre_mine(Regle *change, unsigned short nombre_mine){
 
     change->nombre_mine = nombre_mine;
 }//fin set_nombre_mine
-
-
-

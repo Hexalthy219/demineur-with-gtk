@@ -14,13 +14,13 @@
 #include "type_opaque.h"
 
 /**
- * \fn initialisation_champ_mine(Terrain *terrain_de_jeu)
+ * \fn nouvelle_partie(Terrain *terrain_de_jeu)
  * \brief crée un champ de mine avec les bons compteurs
  * 
  * \param terrain_de_jeu La structure contenant toutes les informations du terrain
  * 
  */
-void initialisation_champ_mine(Terrain *terrain_de_jeu);
+void nouvelle_partie(Terrain *terrain_de_jeu);
 
 /**
  * \fn initialisation_mine_0(Terrain *terrain_de_jeu)
@@ -51,7 +51,7 @@ void aleatoire_bombe_et_compteur(Terrain *terrain_de_jeu);
  * \param colonne La colonne où on fait le test 
  * 
  */
-void decouvre_boite(Terrain *terrain_de_jeu, unsigned short ligne, unsigned short colonne);
+void decouvre_boite(Terrain *terrain_de_jeu, unsigned int ligne, unsigned int colonne);
 
 /**
  * \fn mode_debutant(Terrain *terrain_de_jeu)

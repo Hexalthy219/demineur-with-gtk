@@ -49,9 +49,9 @@ Terrain *get_Terrain(Data_for_Callback *data);
 
 GtkWidget *get_fenetre(Data_for_Callback *data);
 
-unsigned short *get_coord_boutton(Data_for_Callback *data);
+unsigned int *get_coord_boutton(Data_for_Callback *data);
 
-void set_coord_boutton(Data_for_Callback *data, unsigned short coord[2]);
+void set_coord_boutton(Data_for_Callback *data, unsigned int coord[2]);
 
 /**
  * \fn cree_champ_mine(int ligne, int colonne)
@@ -83,6 +83,12 @@ void set_elem_champ_mine(Terrain *change, Boite *mine, unsigned int i, unsigned 
 Regle *get_regle(Terrain *recup);
 
 void set_regle(Terrain *change, Regle *regle);
+
+GtkWidget ***get_tableau_bouton(Terrain *recup);
+
+GtkWidget *get_bouton(Terrain *terrain, unsigned int ligne, unsigned int colonne);
+
+void set_tableau_bouton(Terrain *change, GtkWidget ***tableau_bouton);
 
 Boite ***constructeur_champ_mine(unsigned short ligne, unsigned short colonne);
 

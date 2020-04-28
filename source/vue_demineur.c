@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -17,13 +18,11 @@
 #include "vue_demineur.h"
 #include "controleur_demineur.h"
 
-static GtkWidget *charge_image_bouton(void);
 
-
-GtkWidget *creation_fenetre(void){
+GtkWidget *creation_fenetre(Terrain *terrain){
     GtkWidget *pFenetre = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(pFenetre), "Démineur");
-    gtk_window_set_default_size(GTK_WINDOW(pFenetre), 1000, 1000);
+    gtk_window_resize(GTK_WINDOW(pFenetre), get_ligne(get_regle(terrain))*30, (get_colonne(get_regle(terrain))*30)+40);
     return pFenetre;
 }
 
@@ -90,10 +89,12 @@ GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain){
     Data_for_Callback *data  = constructeur_Data_for_Callback(terrain, pFenetre);
     //les signaux
     g_signal_connect(G_OBJECT(item_quitter), "activate", G_CALLBACK(gtk_main_quit), NULL);
+
     g_signal_connect(G_OBJECT(item_niveau_debutant), "activate", G_CALLBACK(click_difficulte_debutant), (gpointer)data);
     g_signal_connect(G_OBJECT(item_niveau_intermediaire), "activate", G_CALLBACK(click_difficulte_intermediaire), (gpointer)data);
     g_signal_connect(G_OBJECT(item_niveau_expert), "activate", G_CALLBACK(click_difficulte_expert), (gpointer)data);
 
+    g_signal_connect(G_OBJECT(item_nouveau), "activate", G_CALLBACK(click_nouvelle_partie), (gpointer)data);
 
     return barre_menu;
 }
@@ -119,13 +120,17 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain){
     //Initialisation barre menu
     GtkWidget *pBarre_menu = creation_menus(pFenetre, terrain);
 
+    //Signaux
+    Data_for_Callback *data_nouvelle_partie = constructeur_Data_for_Callback(terrain, pFenetre);
+    g_signal_connect(G_OBJECT(pButton_new_game), "clicked", G_CALLBACK(click_nouvelle_partie), (gpointer)data_nouvelle_partie);
+
     gtk_box_pack_start(GTK_BOX(pVBox), pBarre_menu, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pVBox), pHBox_info, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_nbr_mine, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pButton_new_game, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_timer, TRUE, TRUE, 0);
     
-    unsigned short tab_coord[2];
+    unsigned int tab_coord[2];
     for (int i = 0; i < nombre_ligne; i++){
         pHBox_champ_mine[i]=gtk_hbox_new(TRUE, 0);
         gtk_box_pack_start(GTK_BOX(pVBox), pHBox_champ_mine[i], TRUE, TRUE, 0);
@@ -137,36 +142,34 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain){
             Data_for_Callback *data = constructeur_Data_for_Callback(terrain, pFenetre);
             tab_coord[0]=i;
             tab_coord[1]=j;
-            printf("%hu %hu\n",tab_coord[0], tab_coord[1]);
             set_coord_boutton(data, tab_coord);
             g_signal_connect(G_OBJECT(pButton[i][j]), "clicked", G_CALLBACK(click_decouvre_case), (gpointer)data);
-            if(i!=(nombre_ligne-1) && j!=(nombre_colonne-1))
-                destructeur_Data_for_Callback(data);
         }
     }
-    
+    set_tableau_bouton(terrain, pButton);
     return pVBox;
 }
 
-static GtkWidget *charge_image_bouton(void){
-    GtkWidget *pBouton;
+int charge_image_bouton(GtkWidget *pButton){
+    assert(pButton!=NULL);
     GdkPixbuf *pb_temp, *pb;
     GtkWidget *image;
-    
+    printf("1\n");
     // 1. Charger l’image et la redimensionner (100*100 pixels)
-    pb_temp = gdk_pixbuf_new_from_file(".png", NULL);
+    pb_temp = gdk_pixbuf_new_from_file("images/1.bmp", NULL);
     if(pb_temp == NULL)
     {
-        printf(" Erreur de chargement de l’image logo-ok-png-6.png!\n");
-        return NULL;
+        printf(" Erreur de chargement de l’image qu'on tente d'afficher bordel de merde!\n");
+        return -1;
     }
     pb = gdk_pixbuf_scale_simple(pb_temp, 20, 20, GDK_INTERP_NEAREST);
-    
-    // 2. Créer le bouton
-    pBouton = gtk_button_new();
-    // 3. Placer l’image
+    printf("2\n");
+
+    // 2. Placer l’image
     image = gtk_image_new_from_pixbuf(pb);
-    gtk_button_set_image(GTK_BUTTON(pBouton), image);
-    
-    return pBouton;
+    printf("3\n");
+
+    gtk_button_set_image(GTK_BUTTON(pButton), image);
+    printf("4\n");
+    return 0; 
 } // fin charge_image_bouton()

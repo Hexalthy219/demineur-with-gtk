@@ -34,10 +34,8 @@ int main(int argc, char **argv){
     set_nombre_mine(recup_arg, NBR_MINE_DEFAULT);
 
     //Récupération des options et modification des règles si respect des limites
-    while ((val = getopt(argc, argv, optstring)) != EOF)
-    {
-        switch (val)
-        {
+    while ((val = getopt(argc, argv, optstring)) != EOF){
+        switch (val){
         case 'l':
             recup = atoi(optarg);
             if(recup>=10 && recup<=30)
@@ -64,6 +62,7 @@ int main(int argc, char **argv){
             printf("\tm\tChoisir le nombre de mine (10(default) - l*h)\n");
             printf("\tH\thelp\n\n");
             printf("Si une option ne respecte pas les valeurs max, celle-ci sera automatique établie à sa valeur par défaut.\n");
+            destructeur_Regle(recup_arg);
             return EXIT_SUCCESS;
 
         default:
@@ -81,14 +80,14 @@ int main(int argc, char **argv){
     destructeur_Regle(recup_arg);
     if (terrain==NULL)
         return EXIT_FAILURE;
-    initialisation_champ_mine(terrain);
+    nouvelle_partie(terrain);
 
     GtkWidget *pFenetre;
     GtkWidget *pVBox;
 
     gtk_init(&argc, &argv);
 
-    pFenetre = creation_fenetre();
+    pFenetre = creation_fenetre(terrain);
     g_signal_connect(G_OBJECT(pFenetre), "destroy", G_CALLBACK(gtk_main_quit), NULL);
     pVBox = structure_box(pFenetre, terrain);
     gtk_container_add(GTK_CONTAINER(pFenetre), pVBox);

@@ -14,6 +14,8 @@
 #include <assert.h>
 
 #include "modele_demineur.h"
+#include "vue_demineur.h"
+#include "controleur_demineur.h"
 #include "type_opaque.h"
 
 #define NBR_MINE_DEBUTANT 10
@@ -33,7 +35,7 @@
 
 static void actualise_compteur_autour_de_bombe(Terrain *Terrain_de_jeu, unsigned short i, unsigned short j, unsigned short ligne_max, unsigned short colonne_max);
 
-void initialisation_champ_mine(Terrain *terrain_de_jeu){
+void nouvelle_partie(Terrain *terrain_de_jeu){
     assert(terrain_de_jeu!=NULL);
     initialisation_mine_0(terrain_de_jeu);
     aleatoire_bombe_et_compteur(terrain_de_jeu);
@@ -46,8 +48,8 @@ void initialisation_mine_0(Terrain *terrain_de_jeu){
     unsigned short colonne_max = get_colonne(get_regle(terrain_de_jeu));
     unsigned short ligne_max = get_ligne(get_regle(terrain_de_jeu));
 
-    for(int i = 0; i<ligne_max; i++){
-        for(int j = 0; j<colonne_max; j++){
+    for(unsigned short i = 0; i<ligne_max; i++){
+        for(unsigned short j = 0; j<colonne_max; j++){
             set_mine(get_elem_champ_mine(terrain_de_jeu, i, j), 0);
         }
     }
@@ -83,13 +85,16 @@ void aleatoire_bombe_et_compteur(Terrain *terrain_de_jeu){
     }
 }
 
-void decouvre_boite(Terrain *terrain_de_jeu, unsigned short ligne, unsigned short colonne){
+void decouvre_boite(Terrain *terrain_de_jeu, unsigned int ligne, unsigned int colonne){
     assert(terrain_de_jeu != NULL);
     
     if(!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)) > 0){
        set_Boite_deja_decouverte(get_regle(terrain_de_jeu), get_Boite_deja_decouverte(get_regle(terrain_de_jeu)) + 1);
        set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne), 1);
         //affiche l'image démerde toi
+        printf("bite\n");
+        GtkWidget *recup_bouton = get_bouton(terrain_de_jeu, ligne, colonne);
+        charge_image_bouton(recup_bouton);
     }
     else if (!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && !(get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)))){
         //affiche cette case en blanc
@@ -271,7 +276,7 @@ void mode_debutant(Terrain *terrain_de_jeu){
     set_temps(get_regle(terrain_de_jeu), TEMPS_DEBUTANT);
     set_nombre_mine(get_regle(terrain_de_jeu), NBR_MINE_DEBUTANT);
     set_champ_mine(terrain_de_jeu, constructeur_champ_mine(get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu))));
-    initialisation_champ_mine(terrain_de_jeu);
+    nouvelle_partie(terrain_de_jeu);
 }
 
 void mode_intermediaire(Terrain * terrain_de_jeu){
@@ -281,7 +286,7 @@ void mode_intermediaire(Terrain * terrain_de_jeu){
     set_temps(get_regle(terrain_de_jeu), TEMPS_INTERMEDIAIRE);
     set_nombre_mine(get_regle(terrain_de_jeu), NBR_MINE_INTERMEDIAIRE);
     set_champ_mine(terrain_de_jeu, constructeur_champ_mine(get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu))));
-    initialisation_champ_mine(terrain_de_jeu);
+    nouvelle_partie(terrain_de_jeu);
 }
 
 void mode_expert(Terrain *terrain_de_jeu){
@@ -291,5 +296,5 @@ void mode_expert(Terrain *terrain_de_jeu){
     set_temps(get_regle(terrain_de_jeu), TEMPS_EXPERT);
     set_nombre_mine(get_regle(terrain_de_jeu), NBR_MINE_EXPERT);
     set_champ_mine(terrain_de_jeu, constructeur_champ_mine(get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu))));
-    initialisation_champ_mine(terrain_de_jeu);
+    nouvelle_partie(terrain_de_jeu);
 }
