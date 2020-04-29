@@ -99,7 +99,7 @@ GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain){
     return barre_menu;
 }
 
-GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain){
+GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pButton){
     char texte_nbr_mine[4], texte[4];
     int nombre_ligne = get_ligne(get_regle(terrain)), nombre_colonne = get_colonne(get_regle(terrain));
    
@@ -109,7 +109,6 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain){
     GtkWidget *pHBox_champ_mine[get_ligne(get_regle(terrain))];
 
     //Initialisation boutons
-    GtkWidget *pButton[get_ligne(get_regle(terrain))][get_colonne(get_regle(terrain))];
     sprintf(texte_nbr_mine, "%hu", get_nombre_mine(get_regle(terrain)));
     GtkWidget *pButton_new_game = gtk_button_new_with_label("O");
 
@@ -134,42 +133,70 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain){
     for (int i = 0; i < nombre_ligne; i++){
         pHBox_champ_mine[i]=gtk_hbox_new(TRUE, 0);
         gtk_box_pack_start(GTK_BOX(pVBox), pHBox_champ_mine[i], TRUE, TRUE, 0);
-        for(int j=0; j<nombre_colonne; j++){
-            sprintf(texte, "%hd", get_mine(get_elem_champ_mine(terrain, i, j)));
-            pButton[i][j]=gtk_button_new();
-            gtk_widget_set_size_request(pButton[i][j], 20, 20);
-            gtk_box_pack_start(GTK_BOX(pHBox_champ_mine[i]), pButton[i][j], TRUE, TRUE, 0);
+        for(int j=0; j < nombre_colonne; j++){
+            // sprintf(texte, "%hd", get_mine(get_elem_champ_mine(terrain, i, j)));
+            pButton[(i*nombre_colonne)+j]=gtk_button_new();
+            gtk_widget_set_size_request(pButton[(i*nombre_colonne)+j], 20, 20);
+            gtk_box_pack_start(GTK_BOX(pHBox_champ_mine[i]), pButton[(i*nombre_colonne)+j], TRUE, TRUE, 0);
             Data_for_Callback *data = constructeur_Data_for_Callback(terrain, pFenetre);
             tab_coord[0]=i;
             tab_coord[1]=j;
             set_coord_boutton(data, tab_coord);
-            g_signal_connect(G_OBJECT(pButton[i][j]), "clicked", G_CALLBACK(click_decouvre_case), (gpointer)data);
+            g_signal_connect(G_OBJECT(pButton[(i*nombre_colonne)+j]), "clicked", G_CALLBACK(click_decouvre_case), (gpointer)data);
         }
     }
     set_tableau_bouton(terrain, pButton);
     return pVBox;
 }
 
-int charge_image_bouton(GtkWidget *pButton){
+int charge_image_bouton(GtkWidget *pButton, int numero_image){
     assert(pButton!=NULL);
     GdkPixbuf *pb_temp, *pb;
     GtkWidget *image;
-    printf("1\n");
-    // 1. Charger l’image et la redimensionner (100*100 pixels)
-    pb_temp = gdk_pixbuf_new_from_file("images/1.bmp", NULL);
+    // 1. Charger l’image et la redimensionner (20*20 pixels)
+    switch(numero_image){
+    case 0:
+        pb_temp = gdk_pixbuf_new_from_file("images/0.bmp", NULL);
+        break;
+    case 1:
+        pb_temp = gdk_pixbuf_new_from_file("images/1.bmp", NULL);
+        break;
+    case 2:
+        pb_temp = gdk_pixbuf_new_from_file("images/2.bmp", NULL);
+        break;
+    case 3:
+        pb_temp = gdk_pixbuf_new_from_file("images/3.bmp", NULL);
+        break;
+    case 4:
+        pb_temp = gdk_pixbuf_new_from_file("images/4.bmp", NULL);
+        break;
+    case 5:
+        pb_temp = gdk_pixbuf_new_from_file("images/5.bmp", NULL);
+        break;
+    case 6:
+        pb_temp = gdk_pixbuf_new_from_file("images/6.bmp", NULL);
+        break;
+    case 7:
+        pb_temp = gdk_pixbuf_new_from_file("images/7.bmp", NULL);
+        break;
+    case 8:
+        pb_temp = gdk_pixbuf_new_from_file("images/8.bmp", NULL);
+        break;
+    case -1:
+        pb_temp = gdk_pixbuf_new_from_file("images/Bomb1.bmp", NULL);
+        break;
+    }
+
     if(pb_temp == NULL)
     {
         printf(" Erreur de chargement de l’image qu'on tente d'afficher bordel de merde!\n");
         return -1;
     }
     pb = gdk_pixbuf_scale_simple(pb_temp, 20, 20, GDK_INTERP_NEAREST);
-    printf("2\n");
 
     // 2. Placer l’image
     image = gtk_image_new_from_pixbuf(pb);
-    printf("3\n");
-
     gtk_button_set_image(GTK_BUTTON(pButton), image);
-    printf("4\n");
+
     return 0; 
 } // fin charge_image_bouton()

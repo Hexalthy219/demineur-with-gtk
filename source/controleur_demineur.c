@@ -53,7 +53,7 @@ void click_difficulte_expert(GtkWidget *pButton, gpointer data){
 }
 
 static void reinitialise_fenetre_nouvelle_pvbox(Data_for_Callback *data){
-    GtkWidget *pVBox = structure_box(get_fenetre(data), get_Terrain(data));
+    GtkWidget *pVBox = structure_box(get_fenetre(data), get_Terrain(data), get_tableau_bouton(get_Terrain(data)));
     gtk_container_foreach (GTK_CONTAINER (get_fenetre(data)), (GtkCallback) gtk_widget_destroy, NULL);
     gtk_container_add(GTK_CONTAINER(get_fenetre(data)), pVBox);
 }

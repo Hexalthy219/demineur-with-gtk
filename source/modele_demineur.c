@@ -89,15 +89,13 @@ void decouvre_boite(Terrain *terrain_de_jeu, unsigned int ligne, unsigned int co
     assert(terrain_de_jeu != NULL);
     
     if(!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)) > 0){
-       set_Boite_deja_decouverte(get_regle(terrain_de_jeu), get_Boite_deja_decouverte(get_regle(terrain_de_jeu)) + 1);
-       set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne), 1);
-        //affiche l'image démerde toi
-        printf("bite\n");
-        GtkWidget *recup_bouton = get_bouton(terrain_de_jeu, ligne, colonne);
-        charge_image_bouton(recup_bouton);
+        set_Boite_deja_decouverte(get_regle(terrain_de_jeu), get_Boite_deja_decouverte(get_regle(terrain_de_jeu)) + 1);
+        set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne), 1);
+        
+        charge_image_bouton(get_bouton(terrain_de_jeu, ligne, colonne), get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)));
     }
     else if (!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && !(get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)))){
-        //affiche cette case en blanc
+        charge_image_bouton(get_bouton(terrain_de_jeu, ligne, colonne), 0);
         set_Boite_deja_decouverte(get_regle(terrain_de_jeu), get_Boite_deja_decouverte(get_regle(terrain_de_jeu)) + 1);
         set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne), 1);
         unsigned short colonne_max = get_ligne(get_regle(terrain_de_jeu)) - 1;

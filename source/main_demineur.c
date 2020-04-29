@@ -84,12 +84,13 @@ int main(int argc, char **argv){
 
     GtkWidget *pFenetre;
     GtkWidget *pVBox;
+    GtkWidget *pTab_button[(get_ligne(get_regle(terrain))*get_colonne(get_regle(terrain)))-1];
 
     gtk_init(&argc, &argv);
 
     pFenetre = creation_fenetre(terrain);
     g_signal_connect(G_OBJECT(pFenetre), "destroy", G_CALLBACK(gtk_main_quit), NULL);
-    pVBox = structure_box(pFenetre, terrain);
+    pVBox = structure_box(pFenetre, terrain, pTab_button);
     gtk_container_add(GTK_CONTAINER(pFenetre), pVBox);
     gtk_widget_show_all(pFenetre);
 

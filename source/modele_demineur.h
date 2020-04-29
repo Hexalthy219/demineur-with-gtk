@@ -43,7 +43,7 @@ void initialisation_case_decouvert_0(Terrain *terrain_de_jeu);
 void aleatoire_bombe_et_compteur(Terrain *terrain_de_jeu);
 
 /**
- * \fn verife_bombe_dans_ta_mere(Terrain *terrain_de_jeu, unsigned short ligne, unsigned short colonne)
+ * \fn decouvre_boite(Terrain *terrain_de_jeu, unsigned short ligne, unsigned short colonne)
  * \brief test si on est sur une case vide et si c'est le cas test les cases à coté
  * 
  * \param terrain_de_jeu La structure contenant toutes les informations du terrain

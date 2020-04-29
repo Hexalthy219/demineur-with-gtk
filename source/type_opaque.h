@@ -84,11 +84,11 @@ Regle *get_regle(Terrain *recup);
 
 void set_regle(Terrain *change, Regle *regle);
 
-GtkWidget ***get_tableau_bouton(Terrain *recup);
+GtkWidget **get_tableau_bouton(Terrain *recup);
 
 GtkWidget *get_bouton(Terrain *terrain, unsigned int ligne, unsigned int colonne);
 
-void set_tableau_bouton(Terrain *change, GtkWidget ***tableau_bouton);
+void set_tableau_bouton(Terrain *change, GtkWidget **tableau_bouton);
 
 Boite ***constructeur_champ_mine(unsigned short ligne, unsigned short colonne);
 

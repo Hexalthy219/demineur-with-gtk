@@ -30,7 +30,7 @@ struct Regle_t{
 struct Terrain_t{
     Boite ***champ_mine;
     Regle *regle;
-    GtkWidget ***pTableau_bouton;
+    GtkWidget **pTableau_bouton;
 };
 
 struct Data_for_Callback_t{
@@ -147,7 +147,7 @@ void set_regle(Terrain *change, Regle *regle){
     change->regle = regle;
 }//fin set_regle
 
-GtkWidget ***get_tableau_bouton(Terrain *recup){
+GtkWidget **get_tableau_bouton(Terrain *recup){
     assert(recup!=NULL);
 
     return recup->pTableau_bouton;
@@ -155,11 +155,12 @@ GtkWidget ***get_tableau_bouton(Terrain *recup){
 
 GtkWidget *get_bouton(Terrain *terrain, unsigned int ligne, unsigned int colonne){
     assert(terrain!=NULL);
+    unsigned short colonne_max = get_colonne(get_regle(terrain));
 
-    return terrain->pTableau_bouton[ligne][colonne];
+    return terrain->pTableau_bouton[(ligne*colonne_max)+colonne];
 }
 
-void set_tableau_bouton(Terrain *change, GtkWidget ***tableau_bouton){
+void set_tableau_bouton(Terrain *change, GtkWidget **tableau_bouton){
     assert(change!=NULL && tableau_bouton!=NULL);
 
     change->pTableau_bouton = tableau_bouton;
