@@ -17,7 +17,7 @@ GtkWidget *creation_fenetre(Terrain *Terrain);
 
 GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain);
 
-GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pTabbutton);
+GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pButton, GtkWidget *pButton_new_game);
 
 int charge_image_bouton(GtkWidget *pButton, int numero_image);
 

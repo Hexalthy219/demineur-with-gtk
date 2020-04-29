@@ -79,4 +79,7 @@ void mode_intermediaire(Terrain *terrain_de_jeu);
  * 
  */
 void mode_expert(Terrain *terrain_de_jeu);
+
+void decouvre_bombe(Terrain *terrain);
+
 #endif
