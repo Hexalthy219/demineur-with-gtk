@@ -100,21 +100,25 @@ void decouvre_boite(Terrain *terrain_de_jeu, unsigned int ligne, unsigned int co
         set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne), 1);
         unsigned short colonne_max = get_ligne(get_regle(terrain_de_jeu)) - 1;
         unsigned short ligne_max = get_colonne(get_regle(terrain_de_jeu)) - 1;
-        if (ligne == 0)
-        {
-            decouvre_boite(terrain_de_jeu, ligne + 1, colonne);
-            if (colonne == 0)
-            {
-                decouvre_boite(terrain_de_jeu, ligne, colonne + 1);
+        if(ligne == 0){
+            decouvre_boite(terrain_de_jeu, ligne+1, colonne);
+            if(colonne == 0){
+                decouvre_boite(terrain_de_jeu, ligne, colonne+1);
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne + 1, colonne + 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne + 1, colonne + 1);
             }
-            else if (colonne == colonne_max)
-            {
-                decouvre_boite(terrain_de_jeu, ligne, colonne - 1);
+            else if(colonne == colonne_max){
+                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne + 1, colonne - 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne + 1, colonne - 1);
             }
-            else
-            {
-                decouvre_boite(terrain_de_jeu, ligne, colonne - 1);
+            else{
+                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne + 1, colonne - 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne + 1, colonne - 1);
                 decouvre_boite(terrain_de_jeu, ligne, colonne + 1);
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne + 1, colonne + 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne + 1, colonne + 1);
             }
         }
         else if (ligne == ligne_max)
@@ -122,34 +126,55 @@ void decouvre_boite(Terrain *terrain_de_jeu, unsigned int ligne, unsigned int co
             decouvre_boite(terrain_de_jeu, ligne - 1, colonne);
             if (colonne == 0)
             {
-                decouvre_boite(terrain_de_jeu, ligne, colonne + 1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne+1);
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne - 1, colonne + 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne - 1, colonne + 1);
             }
             else if (colonne == colonne_max)
             {
-                decouvre_boite(terrain_de_jeu, ligne, colonne - 1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne - 1, colonne - 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne - 1, colonne - 1);
             }
             else
             {
-                decouvre_boite(terrain_de_jeu, ligne, colonne - 1);
-                decouvre_boite(terrain_de_jeu, ligne, colonne + 1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne - 1, colonne - 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne - 1, colonne - 1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne+1);
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne - 1, colonne + 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne - 1, colonne + 1);
             }
         }
         else
         {
-            decouvre_boite(terrain_de_jeu, ligne - 1, colonne);
-            decouvre_boite(terrain_de_jeu, ligne + 1, colonne);
-            if (colonne == 0)
-            {
-                decouvre_boite(terrain_de_jeu, ligne, colonne + 1);
+            decouvre_boite(terrain_de_jeu, ligne-1, colonne);
+            decouvre_boite(terrain_de_jeu, ligne+1, colonne);
+            if(colonne == 0){
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne - 1, colonne + 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne - 1, colonne + 1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne+1);
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne + 1, colonne + 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne + 1, colonne + 1);
             }
-            else if (colonne == colonne_max)
-            {
-                decouvre_boite(terrain_de_jeu, ligne, colonne - 1);
+            else if(colonne == colonne_max){
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne - 1, colonne - 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne - 1, colonne - 1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne + 1, colonne - 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne + 1, colonne - 1);
             }
-            else
-            {
-                decouvre_boite(terrain_de_jeu, ligne, colonne - 1);
-                decouvre_boite(terrain_de_jeu, ligne, colonne + 1);
+            else{
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne - 1, colonne - 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne - 1, colonne - 1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne + 1, colonne - 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne + 1, colonne - 1);
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne - 1, colonne + 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne - 1, colonne + 1);
+                decouvre_boite(terrain_de_jeu, ligne, colonne+1);
+                if (get_mine(get_elem_champ_mine(terrain_de_jeu, ligne + 1, colonne + 1)) > 0)
+                    decouvre_boite(terrain_de_jeu, ligne + 1, colonne + 1);
             }
         }
     }
