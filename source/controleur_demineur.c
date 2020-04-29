@@ -77,6 +77,8 @@ void click_nouvelle_partie(GtkWidget *pButton, gpointer data){
 
     Data_for_Callback *recup_data = data;
     nouvelle_partie(get_Terrain(recup_data));
+    reinitialise_fenetre_nouvelle_pvbox(recup_data);
+    gtk_widget_show_all(get_fenetre(recup_data));
 }
 
 
