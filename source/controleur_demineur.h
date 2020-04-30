@@ -19,7 +19,7 @@ void click_difficulte_intermediaire(GtkWidget *pButton, gpointer data);
 
 void click_difficulte_expert(GtkWidget *pButton, gpointer data);
 
-void click_decouvre_case(GtkWidget *pButton, gpointer data);
+void click_decouvre_case(GtkWidget *pButton, GdkEventButton *type_click, gpointer data);
 
 void click_nouvelle_partie(GtkWidget *pButton, gpointer data);
 

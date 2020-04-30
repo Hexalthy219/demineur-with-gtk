@@ -58,7 +58,7 @@ static void reinitialise_fenetre_nouvelle_pvbox(Data_for_Callback *data){
     gtk_container_add(GTK_CONTAINER(get_fenetre(data)), pVBox);
 }
 
-void click_decouvre_case(GtkWidget *pButton, gpointer data){
+void click_decouvre_case(GtkWidget *pButton, GdkEventButton *type_click, gpointer data){
     assert(data!=NULL);
     pButton+=0;
 
@@ -66,10 +66,15 @@ void click_decouvre_case(GtkWidget *pButton, gpointer data){
     if(get_win(get_regle(get_Terrain(recup_data)))!=0)
         return;
     unsigned int *coord = get_coord_boutton(recup_data);
-    if(get_Boite_decouverte(get_elem_champ_mine(get_Terrain(recup_data), coord[0], coord[1]))==1){
+    if(get_Boite_decouverte(get_elem_champ_mine(get_Terrain(recup_data), coord[0], coord[1]))!=0)
         return;
+    
+    if(type_click->button==1)  
+        decouvre_boite(get_Terrain(recup_data), coord[0], coord[1]);
+    else if(type_click->button==3){
+        set_Boite_decouverte(get_elem_champ_mine(get_Terrain(recup_data), coord[0], coord[1]), -1);
+        charge_image_bouton(get_bouton(get_Terrain(recup_data), coord[0], coord[1]), -4);
     }
-    decouvre_boite(get_Terrain(recup_data), coord[0], coord[1]);
     
 }
 

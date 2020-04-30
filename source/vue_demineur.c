@@ -140,7 +140,8 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pBut
             tab_coord[0]=i;
             tab_coord[1]=j;
             set_coord_boutton(data, tab_coord);
-            g_signal_connect(G_OBJECT(pButton[(i*nombre_colonne)+j]), "clicked", G_CALLBACK(click_decouvre_case), (gpointer)data);
+            gtk_widget_set_events(pButton[(i*nombre_colonne)+j], GDK_BUTTON_PRESS_MASK);
+            g_signal_connect(G_OBJECT(pButton[(i*nombre_colonne)+j]), "button_press_event", G_CALLBACK(click_decouvre_case), (gpointer)data);
         }
     }
     set_tableau_bouton(terrain, pButton);
