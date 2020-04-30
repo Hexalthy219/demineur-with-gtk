@@ -35,6 +35,8 @@
 
 static void actualise_compteur_autour_de_bombe(Terrain *Terrain_de_jeu, unsigned short i, unsigned short j, unsigned short ligne_max, unsigned short colonne_max);
 
+static int nombre_drapeau_autour(Terrain *terrain, unsigned short i, unsigned short j);
+
 void nouvelle_partie(Terrain *terrain_de_jeu){
     assert(terrain_de_jeu!=NULL);
 
@@ -327,4 +329,51 @@ void decouvre_bombe(Terrain *terrain){
             derniere_coord_bombe_devoilee[0]++;
         }
     }
+}
+
+int verifie_correspondance_nombre_drapeau_nombre_mine(Terrain *terrain, unsigned short i, unsigned short j){
+    if(nombre_drapeau_autour(terrain, i, j)==get_mine(get_elem_champ_mine(terrain, i, j)))
+        return 1;
+    else
+        return 0;
+}
+
+static int nombre_drapeau_autour(Terrain *terrain, unsigned short i, unsigned short j){
+    int nombre_drapeau=0;
+    unsigned short ligne = get_ligne(get_regle(terrain)), colonne = get_colonne(get_regle(terrain));
+
+    if(i!=0 && j!=0){
+        if(get_Boite_decouverte(get_elem_champ_mine(terrain, i-1, j-1))==-1)
+            nombre_drapeau++;
+    }
+    if(i!=0){
+        if(get_Boite_decouverte(get_elem_champ_mine(terrain, i-1, j))==-1)
+            nombre_drapeau++;
+    }
+    if(i!=0 && j!=colonne-1){
+        if (get_Boite_decouverte(get_elem_champ_mine(terrain, i-1, j+1))==-1)
+         nombre_drapeau++;
+    }
+    if(j!=0){
+        if (get_Boite_decouverte(get_elem_champ_mine(terrain, i, j-1))==-1)
+            nombre_drapeau++;
+    }
+    if(j!=colonne-1){
+        if (get_Boite_decouverte(get_elem_champ_mine(terrain, i, j+1))==-1)
+            nombre_drapeau++;
+    }
+    if(i!=ligne-1 && j!=0){
+        if (get_Boite_decouverte(get_elem_champ_mine(terrain, i+1, j-1))==-1)
+            nombre_drapeau++;
+    }
+    if(i!=ligne-1){
+        if (get_Boite_decouverte(get_elem_champ_mine(terrain, i+1, j))==-1)
+            nombre_drapeau++;
+    }
+    if(i!=ligne-1 && j!=colonne-1){
+        if (get_Boite_decouverte(get_elem_champ_mine(terrain, i+1, j+1))==-1)
+            nombre_drapeau++;
+    }
+
+    return nombre_drapeau;
 }
