@@ -41,6 +41,7 @@ GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain){
     GtkWidget *item_aide, *item_info_createur;
     
     GtkAccelGroup *accelerateur = NULL;
+    GtkAccelGroup *accelerateur1 = NULL;
 
     //barre de menu
     barre_menu = gtk_menu_bar_new();
@@ -56,7 +57,7 @@ GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain){
     
     //création des items avec images
     item_partie = gtk_menu_item_new_with_mnemonic("_Partie");
-    item_nouveau = gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW, NULL);
+    item_nouveau = gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW, accelerateur);
     item_separateur = gtk_separator_menu_item_new();
     item_quitter = gtk_image_menu_item_new_from_stock(GTK_STOCK_QUIT, accelerateur);
 
@@ -70,6 +71,7 @@ GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain){
 
 
     gtk_widget_add_accelerator(item_quitter, "activate", accelerateur, GDK_q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(item_nouveau, "activate", accelerateur, GDK_n, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 
     //attacher les items
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_partie), menu_partie);
