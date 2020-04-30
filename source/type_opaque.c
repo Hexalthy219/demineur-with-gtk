@@ -25,12 +25,14 @@ struct Regle_t{
     unsigned short temps;
     unsigned short nombre_mine;
     short boite_deja_decouverte;
+    short win;
 };
 
 struct Terrain_t{
     Boite ***champ_mine;
     Regle *regle;
     GtkWidget **pTableau_bouton;
+    GtkWidget *pBouton_new_game;
 };
 
 struct Data_for_Callback_t{
@@ -164,6 +166,18 @@ void set_tableau_bouton(Terrain *change, GtkWidget **tableau_bouton){
     assert(change!=NULL && tableau_bouton!=NULL);
 
     change->pTableau_bouton = tableau_bouton;
+}
+
+GtkWidget *get_bouton_new_game(Terrain *terrain){
+    assert(terrain!=NULL);
+
+    return terrain->pBouton_new_game;
+}
+
+void set_bouton_new_game(Terrain *terrain, GtkWidget *pBouton_new_game){
+    assert(terrain!=NULL && pBouton_new_game!=NULL);
+
+    terrain->pBouton_new_game = pBouton_new_game;
 }
 
 Boite ***constructeur_champ_mine(unsigned short ligne, unsigned short colonne){
@@ -323,3 +337,15 @@ void set_nombre_mine(Regle *change, unsigned short nombre_mine){
 
     change->nombre_mine = nombre_mine;
 }//fin set_nombre_mine
+
+short get_win(Regle *recup){
+    assert(recup!=NULL);
+
+    return recup->win;
+}//fin get_win
+
+void set_win(Regle *change, short win){
+    assert(change!=NULL);
+
+    change->win = win;
+}//fin set_win

@@ -18,11 +18,12 @@
 #include "vue_demineur.h"
 #include "controleur_demineur.h"
 
+static void popup_close(GtkWidget *pButton, gpointer data);
 
 GtkWidget *creation_fenetre(Terrain *terrain){
     GtkWidget *pFenetre = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(pFenetre), "Démineur");
-    gtk_window_resize(GTK_WINDOW(pFenetre), get_ligne(get_regle(terrain))*30, (get_colonne(get_regle(terrain))*30)+40);
+    gtk_window_resize(GTK_WINDOW(pFenetre), get_ligne(get_regle(terrain))*35, (get_colonne(get_regle(terrain))*35)+100);
     return pFenetre;
 }
 
@@ -98,11 +99,13 @@ GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain){
 
     g_signal_connect(G_OBJECT(item_nouveau), "activate", G_CALLBACK(click_nouvelle_partie), (gpointer)data);
 
+    g_signal_connect(G_OBJECT(item_info_createur), "activate", G_CALLBACK(click_a_propos), NULL);
+
     return barre_menu;
 }
 
-GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pButton){
-    char texte_nbr_mine[4], texte[4];
+GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pButton, GtkWidget *pButton_new_game){
+    char texte_nbr_mine[4];
     int nombre_ligne = get_ligne(get_regle(terrain)), nombre_colonne = get_colonne(get_regle(terrain));
    
     //Initialisation box
@@ -112,7 +115,8 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pBut
 
     //Initialisation boutons
     sprintf(texte_nbr_mine, "%hu", get_nombre_mine(get_regle(terrain)));
-    GtkWidget *pButton_new_game = gtk_button_new_with_label("O");
+    pButton_new_game = gtk_button_new();
+    gtk_widget_set_size_request(pButton_new_game, 35, 35);
 
     //Initialisation labels
     GtkWidget *pLabel_nbr_mine = gtk_label_new(texte_nbr_mine);
@@ -120,23 +124,20 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pBut
 
     //Initialisation barre menu
     GtkWidget *pBarre_menu = creation_menus(pFenetre, terrain);
-
-    //Signaux
-    Data_for_Callback *data_nouvelle_partie = constructeur_Data_for_Callback(terrain, pFenetre);
-    g_signal_connect(G_OBJECT(pButton_new_game), "clicked", G_CALLBACK(click_nouvelle_partie), (gpointer)data_nouvelle_partie);
+    
 
     gtk_box_pack_start(GTK_BOX(pVBox), pBarre_menu, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pVBox), pHBox_info, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_nbr_mine, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pButton_new_game, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_timer, TRUE, TRUE, 0);
+
     
     unsigned int tab_coord[2];
     for (int i = 0; i < nombre_ligne; i++){
         pHBox_champ_mine[i]=gtk_hbox_new(TRUE, 0);
         gtk_box_pack_start(GTK_BOX(pVBox), pHBox_champ_mine[i], TRUE, TRUE, 0);
         for(int j=0; j < nombre_colonne; j++){
-            // sprintf(texte, "%hd", get_mine(get_elem_champ_mine(terrain, i, j)));
             pButton[(i*nombre_colonne)+j]=gtk_button_new();
             gtk_widget_set_size_request(pButton[(i*nombre_colonne)+j], 20, 20);
             gtk_box_pack_start(GTK_BOX(pHBox_champ_mine[i]), pButton[(i*nombre_colonne)+j], TRUE, TRUE, 0);
@@ -144,10 +145,19 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pBut
             tab_coord[0]=i;
             tab_coord[1]=j;
             set_coord_boutton(data, tab_coord);
-            g_signal_connect(G_OBJECT(pButton[(i*nombre_colonne)+j]), "clicked", G_CALLBACK(click_decouvre_case), (gpointer)data);
+            gtk_widget_set_events(pButton[(i*nombre_colonne)+j], GDK_BUTTON_PRESS_MASK);
+            g_signal_connect(G_OBJECT(pButton[(i*nombre_colonne)+j]), "button_press_event", G_CALLBACK(click_decouvre_case), (gpointer)data);
         }
     }
     set_tableau_bouton(terrain, pButton);
+    set_bouton_new_game(terrain, pButton_new_game);
+
+    charge_image_bouton(get_bouton_new_game(terrain), -5);
+
+     //Signaux
+    Data_for_Callback *data_nouvelle_partie = constructeur_Data_for_Callback(terrain, pFenetre);
+    g_signal_connect(G_OBJECT(pButton_new_game), "clicked", G_CALLBACK(click_nouvelle_partie), (gpointer)data_nouvelle_partie);
+
     return pVBox;
 }
 
@@ -157,36 +167,54 @@ int charge_image_bouton(GtkWidget *pButton, int numero_image){
     GtkWidget *image;
     // 1. Charger l’image et la redimensionner (20*20 pixels)
     switch(numero_image){
-    case 0:
-        pb_temp = gdk_pixbuf_new_from_file("images/0.bmp", NULL);
-        break;
-    case 1:
-        pb_temp = gdk_pixbuf_new_from_file("images/1.bmp", NULL);
-        break;
-    case 2:
-        pb_temp = gdk_pixbuf_new_from_file("images/2.bmp", NULL);
-        break;
-    case 3:
-        pb_temp = gdk_pixbuf_new_from_file("images/3.bmp", NULL);
-        break;
-    case 4:
-        pb_temp = gdk_pixbuf_new_from_file("images/4.bmp", NULL);
-        break;
-    case 5:
-        pb_temp = gdk_pixbuf_new_from_file("images/5.bmp", NULL);
-        break;
-    case 6:
-        pb_temp = gdk_pixbuf_new_from_file("images/6.bmp", NULL);
-        break;
-    case 7:
-        pb_temp = gdk_pixbuf_new_from_file("images/7.bmp", NULL);
-        break;
-    case 8:
-        pb_temp = gdk_pixbuf_new_from_file("images/8.bmp", NULL);
-        break;
-    case -1:
-        pb_temp = gdk_pixbuf_new_from_file("images/Bomb1.bmp", NULL);
-        break;
+        case 0://chiffre 0
+            pb_temp = gdk_pixbuf_new_from_file("images/0.bmp", NULL);
+            break;
+        case 1://chiffre 1
+            pb_temp = gdk_pixbuf_new_from_file("images/1.bmp", NULL);
+            break;
+        case 2://chiffre 2
+            pb_temp = gdk_pixbuf_new_from_file("images/2.bmp", NULL);
+            break;
+        case 3://chiffre 3
+            pb_temp = gdk_pixbuf_new_from_file("images/3.bmp", NULL);
+            break;
+        case 4://chiffre 4
+            pb_temp = gdk_pixbuf_new_from_file("images/4.bmp", NULL);
+            break;
+        case 5://chiffre 5
+            pb_temp = gdk_pixbuf_new_from_file("images/5.bmp", NULL);
+            break;
+        case 6://chiffre 6
+            pb_temp = gdk_pixbuf_new_from_file("images/6.bmp", NULL);
+            break;
+        case 7://chiffre 7
+            pb_temp = gdk_pixbuf_new_from_file("images/7.bmp", NULL);
+            break;
+        case 8://chiffre 8
+            pb_temp = gdk_pixbuf_new_from_file("images/8.bmp", NULL);
+            break;
+        case -1://bombe
+            pb_temp = gdk_pixbuf_new_from_file("images/Bomb1.bmp", NULL);
+            break;
+        case -2://bombe barrée -> si lorsque perdu car cliqué sur bombe, un drapeau se trouvait sur une case sans bombe
+            pb_temp = gdk_pixbuf_new_from_file("images/Bomb2.bmp", NULL);
+            break;
+        case -3://bombe rouge -> celle qui a explosée
+            pb_temp = gdk_pixbuf_new_from_file("images/Bomb1.bmp", NULL);
+            break;
+        case -4://drapeau
+            pb_temp = gdk_pixbuf_new_from_file("images/flag.png", NULL);
+            break;
+        case -5://image new_game defaut
+            pb_temp = gdk_pixbuf_new_from_file("images/Bonhomme1.bmp", NULL);
+            break;
+        case -6://image new_game perdu
+            pb_temp = gdk_pixbuf_new_from_file("images/Bonhomme3.bmp", NULL);
+            break;
+        case -7://image new_game gagné
+            pb_temp = gdk_pixbuf_new_from_file("images/Bonhomme4.bmp", NULL);
+            break;
     }
 
     if(pb_temp == NULL)
@@ -202,3 +230,29 @@ int charge_image_bouton(GtkWidget *pButton, int numero_image){
 
     return 0; 
 } // fin charge_image_bouton()
+
+void fenetre_pop_up_a_propos(void){
+    GtkWidget *pPopup = gtk_window_new(GTK_WINDOW_POPUP);
+    GtkWidget *pVBox = gtk_vbox_new(TRUE, 0);
+    GtkWidget *pHBox = gtk_hbox_new(TRUE, 0);
+    GtkWidget *pLabel = gtk_label_new("Demineur\nCréateur : Randaxhe Martin & Russe Cyril\nINFO0030--30/04/19");
+    GtkWidget *pButton_ok = gtk_button_new_with_label("ok");
+
+    gtk_window_set_default_size(GTK_WINDOW(pPopup), 500, 150);
+    gtk_window_move(GTK_WINDOW(pPopup), 550, 420);
+    gtk_box_pack_start(GTK_BOX(pVBox), pLabel, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(pVBox), pHBox, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(pHBox), pButton_ok, TRUE, FALSE, 0);
+
+    gtk_container_add(GTK_CONTAINER(pPopup), pVBox);
+
+    g_signal_connect(G_OBJECT(pButton_ok), "clicked", G_CALLBACK(popup_close), (gpointer)pPopup);
+
+    gtk_widget_show_all(pPopup);
+}
+
+static void popup_close(GtkWidget *pButton, gpointer data){
+    GtkWidget *recup_data = data;
+    pButton = pButton;//inutile, mais sinon warning "unused variable à la compilation"
+    gtk_widget_destroy(recup_data);
+}//fin popup_close

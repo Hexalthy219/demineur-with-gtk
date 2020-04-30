@@ -79,4 +79,9 @@ void mode_intermediaire(Terrain *terrain_de_jeu);
  * 
  */
 void mode_expert(Terrain *terrain_de_jeu);
+
+void decouvre_bombe(Terrain *terrain);
+
+int verifie_correspondance_nombre_drapeau_nombre_mine(Terrain *terrain, unsigned short i, unsigned short j);
+
 #endif

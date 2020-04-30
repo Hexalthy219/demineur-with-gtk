@@ -23,6 +23,8 @@ typedef struct Boite_t Boite;
 /**
  * \struct typedef struct Regle_t Regle
  * \brief Déclaration du type opaque Regle
+ * 
+ * 
  *
  */
 typedef struct Regle_t Regle;
@@ -90,6 +92,10 @@ GtkWidget *get_bouton(Terrain *terrain, unsigned int ligne, unsigned int colonne
 
 void set_tableau_bouton(Terrain *change, GtkWidget **tableau_bouton);
 
+GtkWidget *get_bouton_new_game(Terrain *terrain);
+
+void set_bouton_new_game(Terrain *terrain, GtkWidget *pBouton_new_game);
+
 Boite ***constructeur_champ_mine(unsigned short ligne, unsigned short colonne);
 
 void destructeur_champ_mine(Boite ***champ_mine, unsigned short ligne, unsigned short colonne);
@@ -129,5 +135,9 @@ void set_temps(Regle *change, unsigned short temps);
 unsigned short get_nombre_mine(Regle *recup);
 
 void set_nombre_mine(Regle *change, unsigned short nombre_mine);
+
+short get_win(Regle *recup);
+
+void set_win(Regle *change, short win);
 
 #endif

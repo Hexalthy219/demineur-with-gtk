@@ -84,13 +84,14 @@ int main(int argc, char **argv){
 
     GtkWidget *pFenetre;
     GtkWidget *pVBox;
-    GtkWidget *pTab_button[(get_ligne(get_regle(terrain))*get_colonne(get_regle(terrain)))-1];
+    GtkWidget *pTab_button[900];
+    GtkWidget *pButton_new_game;
 
     gtk_init(&argc, &argv);
 
     pFenetre = creation_fenetre(terrain);
     g_signal_connect(G_OBJECT(pFenetre), "destroy", G_CALLBACK(gtk_main_quit), NULL);
-    pVBox = structure_box(pFenetre, terrain, pTab_button);
+    pVBox = structure_box(pFenetre, terrain, pTab_button, pButton_new_game);
     gtk_container_add(GTK_CONTAINER(pFenetre), pVBox);
     gtk_widget_show_all(pFenetre);
 
