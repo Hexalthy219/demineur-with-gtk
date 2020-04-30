@@ -229,6 +229,15 @@ int charge_image_bouton(GtkWidget *pButton, int numero_image){
     return 0; 
 } // fin charge_image_bouton()
 
+void reinitialise_image_bouton(Terrain *terrain){
+    unsigned int ligne = get_ligne(get_regle(terrain)), colonne = get_colonne(get_regle(terrain));
+    
+    for(unsigned int i=0; i<ligne; i++){
+        for(unsigned int j=0; j<colonne; j++)
+            gtk_button_set_image(GTK_BUTTON(get_bouton(terrain, i, j)), NULL);
+    }
+}
+
 void fenetre_pop_up_a_propos(void){
     GtkWidget *pPopup = gtk_window_new(GTK_WINDOW_POPUP);
     GtkWidget *pVBox = gtk_vbox_new(TRUE, 0);

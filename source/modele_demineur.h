@@ -29,9 +29,7 @@ void nouvelle_partie(Terrain *terrain_de_jeu);
  * \param terrain_de_jeu La structure contenant toutes les informations du terrain
  * 
  */
-void initialisation_mine_0(Terrain *terrain_de_jeu);
-
-void initialisation_case_decouvert_0(Terrain *terrain_de_jeu);
+void initialisation_0(Terrain *terrain_de_jeu);
 
 /**
  * \fn aleatoire_bombe_et_compteur(Terrain *terrain_de_jeu)
