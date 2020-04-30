@@ -16,7 +16,15 @@
 #include "modele_demineur.h"
 #include "vue_demineur.h"
 #include "controleur_demineur.h"
-
+/**
+ * \fn reinitialise_fenetre_nouvelle_pvbox(Data_for_Callback *data)
+ * \brief crée une nouvelle pvbox, supprime l'ancienne contenue dans le container pFenetre et le remplace par cette nouvelle pvbox
+ * 
+ * \param data un pointeur vers Data_for_Callback contenant les données nécessaires au changement de fenêtre
+ * 
+ * \pre data!=NULL
+ * 
+ */
 static void reinitialise_fenetre_nouvelle_pvbox(Data_for_Callback *data);
 
 void click_difficulte_debutant(GtkWidget *pButton, gpointer data){

@@ -41,7 +41,6 @@ GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain){
     GtkWidget *item_aide, *item_info_createur;
     
     GtkAccelGroup *accelerateur = NULL;
-    GtkAccelGroup *accelerateur1 = NULL;
 
     //barre de menu
     barre_menu = gtk_menu_bar_new();
@@ -163,7 +162,7 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pBut
 
 int charge_image_bouton(GtkWidget *pButton, int numero_image){
     assert(pButton!=NULL);
-    GdkPixbuf *pb_temp, *pb;
+    GdkPixbuf *pb_temp, *emeline_la_boss;
     GtkWidget *image;
     // 1. Charger l’image et la redimensionner (20*20 pixels)
     switch(numero_image){
@@ -222,10 +221,10 @@ int charge_image_bouton(GtkWidget *pButton, int numero_image){
         printf(" Erreur de chargement de l’image qu'on tente d'afficher bordel de merde!\n");
         return -1;
     }
-    pb = gdk_pixbuf_scale_simple(pb_temp, 20, 20, GDK_INTERP_NEAREST);
+    emeline_la_boss = gdk_pixbuf_scale_simple(pb_temp, 20, 20, GDK_INTERP_NEAREST);
 
     // 2. Placer l’image
-    image = gtk_image_new_from_pixbuf(pb);
+    image = gtk_image_new_from_pixbuf(emeline_la_boss);
     gtk_button_set_image(GTK_BUTTON(pButton), image);
 
     return 0; 

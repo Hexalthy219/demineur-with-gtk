@@ -88,7 +88,7 @@ int main(int argc, char **argv){
     GtkWidget *pButton_new_game;
 
     gtk_init(&argc, &argv);
-
+    //Initialisation de la fenetre et affichage
     pFenetre = creation_fenetre(terrain);
     g_signal_connect(G_OBJECT(pFenetre), "destroy", G_CALLBACK(gtk_main_quit), NULL);
     pVBox = structure_box(pFenetre, terrain, pTab_button, pButton_new_game);
