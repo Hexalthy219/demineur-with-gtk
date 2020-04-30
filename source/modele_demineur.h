@@ -80,8 +80,25 @@ void mode_intermediaire(Terrain *terrain_de_jeu);
  */
 void mode_expert(Terrain *terrain_de_jeu);
 
+/**
+ * \fn decouvre_bombe(Terrain *terrain)
+ * \brief permet d'afficher toutes les bombes en cas de défaite et tous les drapeaux en cas de victoire
+ * 
+ * \param terrain La structure contenant toute les information du terrain
+ * 
+ */ 
 void decouvre_bombe(Terrain *terrain);
 
+/**
+ * \fn verifie_correspondance_nombre_drapeau_nombre_mine(Terrain *terrain, unsigned short i, unsigned short j)
+ * \brief regarde si il y a un même nombre de drapeau et de mine
+ * 
+ * \param terrain La structure contenant toute les information du terrain
+ * \param i la ligne à laquelle on fait la vérification
+ * \param j la colonne à laquelle on fait la vérification
+ * 
+ * \return 1 si il y a bien le même nombre de drapeau et de mine sinon 0
+ */
 int verifie_correspondance_nombre_drapeau_nombre_mine(Terrain *terrain, unsigned short i, unsigned short j);
 
 #endif
