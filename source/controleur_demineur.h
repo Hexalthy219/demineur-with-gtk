@@ -23,5 +23,7 @@ void click_decouvre_case(GtkWidget *pButton, GdkEventButton *type_click, gpointe
 
 void click_nouvelle_partie(GtkWidget *pButton, gpointer data);
 
+void click_a_propos(GtkWidget *pButton, gpointer data);
+
 
 #endif

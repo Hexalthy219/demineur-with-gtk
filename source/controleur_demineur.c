@@ -115,4 +115,10 @@ void click_nouvelle_partie(GtkWidget *pButton, gpointer data){
     gtk_widget_show_all(get_fenetre(recup_data));
 }
 
+void click_a_propos(GtkWidget *pButton, gpointer data){
+    pButton+=0;
+
+    fenetre_pop_up_a_propos();
+}
+
 

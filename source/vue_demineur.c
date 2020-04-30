@@ -18,6 +18,7 @@
 #include "vue_demineur.h"
 #include "controleur_demineur.h"
 
+static void popup_close(GtkWidget *pButton, gpointer data);
 
 GtkWidget *creation_fenetre(Terrain *terrain){
     GtkWidget *pFenetre = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -95,6 +96,8 @@ GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain){
     g_signal_connect(G_OBJECT(item_niveau_expert), "activate", G_CALLBACK(click_difficulte_expert), (gpointer)data);
 
     g_signal_connect(G_OBJECT(item_nouveau), "activate", G_CALLBACK(click_nouvelle_partie), (gpointer)data);
+
+    g_signal_connect(G_OBJECT(item_info_createur), "activate", G_CALLBACK(click_a_propos), NULL);
 
     return barre_menu;
 }
@@ -225,3 +228,29 @@ int charge_image_bouton(GtkWidget *pButton, int numero_image){
 
     return 0; 
 } // fin charge_image_bouton()
+
+void fenetre_pop_up_a_propos(void){
+    GtkWidget *pPopup = gtk_window_new(GTK_WINDOW_POPUP);
+    GtkWidget *pVBox = gtk_vbox_new(TRUE, 0);
+    GtkWidget *pHBox = gtk_hbox_new(TRUE, 0);
+    GtkWidget *pLabel = gtk_label_new("Demineur\nCréateur : Randaxhe Martin & Russe Cyril\nINFO0030--30/04/19");
+    GtkWidget *pButton_ok = gtk_button_new_with_label("ok");
+
+    gtk_window_set_default_size(GTK_WINDOW(pPopup), 500, 150);
+    gtk_window_move(GTK_WINDOW(pPopup), 550, 420);
+    gtk_box_pack_start(GTK_BOX(pVBox), pLabel, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(pVBox), pHBox, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(pHBox), pButton_ok, TRUE, FALSE, 0);
+
+    gtk_container_add(GTK_CONTAINER(pPopup), pVBox);
+
+    g_signal_connect(G_OBJECT(pButton_ok), "clicked", G_CALLBACK(popup_close), (gpointer)pPopup);
+
+    gtk_widget_show_all(pPopup);
+}
+
+static void popup_close(GtkWidget *pButton, gpointer data){
+    GtkWidget *recup_data = data;
+    pButton = pButton;//inutile, mais sinon warning "unused variable à la compilation"
+    gtk_widget_destroy(recup_data);
+}//fin popup_close

@@ -21,4 +21,6 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pBut
 
 int charge_image_bouton(GtkWidget *pButton, int numero_image);
 
+void fenetre_pop_up_a_propos(void);
+
 #endif
