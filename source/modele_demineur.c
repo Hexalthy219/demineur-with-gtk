@@ -33,269 +33,267 @@
 #define NBR_LIGNE_EXPERT 30
 #define NBR_COLONNE_EXPERT 30
 
-static void actualise_compteur_autour_de_bombe(Terrain *Terrain_de_jeu, unsigned short i, unsigned short j, unsigned short ligne_max, unsigned short colonne_max);
+static void actualise_compteur_autour_de_bombe(Terrain *terrain, unsigned short i, unsigned short j, unsigned short ligne_max, unsigned short colonne_max);
 
 static int nombre_drapeau_autour(Terrain *terrain, unsigned short i, unsigned short j);
 
-void nouvelle_partie(Terrain *terrain_de_jeu){
-    assert(terrain_de_jeu!=NULL);
+void nouvelle_partie(Terrain *terrain){
+    assert(terrain!=NULL);
 
-    initialisation_0(terrain_de_jeu);
-    aleatoire_bombe_et_compteur(terrain_de_jeu);
-    set_Boite_deja_decouverte(get_regle(terrain_de_jeu), 0);
-    set_win(get_regle(terrain_de_jeu), 0);
+    Regle *regle = get_regle(terrain);
+
+    initialisation_0(terrain);
+    aleatoire_bombe_et_compteur(terrain);
+    set_Boite_deja_decouverte(regle, 0);
+    set_win(regle, 0);
 }
 
-void initialisation_0(Terrain *terrain_de_jeu){
-    assert(terrain_de_jeu != NULL);
-    unsigned short colonne_max = get_colonne(get_regle(terrain_de_jeu)), ligne_max = get_ligne(get_regle(terrain_de_jeu));
+void initialisation_0(Terrain *terrain){
+    assert(terrain != NULL);
+    unsigned short colonne_max = get_colonne(get_regle(terrain)), ligne_max = get_ligne(get_regle(terrain));
 
     for (int i = 0; i < ligne_max; i++){
         for (int j = 0; j < colonne_max; j++){
-            set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, i, j), 0);
-            set_mine(get_elem_champ_mine(terrain_de_jeu, i, j), 0);
+            set_Boite_decouverte(get_elem_champ_mine(terrain, i, j), 0);
+            set_mine(get_elem_champ_mine(terrain, i, j), 0);
         }
     }
 }
 
-void aleatoire_bombe_et_compteur(Terrain *terrain_de_jeu){
-    assert(terrain_de_jeu != NULL);
+void aleatoire_bombe_et_compteur(Terrain *terrain){
+    assert(terrain != NULL);
     srand(time(NULL));
-    unsigned short nbr_mine = get_nombre_mine(get_regle(terrain_de_jeu));
-    unsigned short colonne_max = get_colonne(get_regle(terrain_de_jeu));
-    unsigned short ligne_max = get_ligne(get_regle(terrain_de_jeu)), i, j;
+    unsigned short nbr_mine = get_nombre_mine(get_regle(terrain));
+    unsigned short colonne_max = get_colonne(get_regle(terrain));
+    unsigned short ligne_max = get_ligne(get_regle(terrain)), i, j;
 
     for(unsigned short k = 0; k < nbr_mine;){
         i = rand()%ligne_max;
         j = rand()%colonne_max;
 
-        if(get_mine(get_elem_champ_mine(terrain_de_jeu, i, j)) >= 0){
-            set_mine(get_elem_champ_mine(terrain_de_jeu, i, j), -1);
-            actualise_compteur_autour_de_bombe(terrain_de_jeu, i, j, ligne_max-1, colonne_max-1);
+        if(get_mine(get_elem_champ_mine(terrain, i, j)) >= 0){
+            set_mine(get_elem_champ_mine(terrain, i, j), -1);
+            actualise_compteur_autour_de_bombe(terrain, i, j, ligne_max-1, colonne_max-1);
             k++;
         }
     }
 }
 
-void decouvre_boite(Terrain *terrain_de_jeu, unsigned int ligne, unsigned int colonne){
-    assert(terrain_de_jeu != NULL);
+void decouvre_boite(Terrain *terrain, unsigned int ligne, unsigned int colonne){
+    assert(terrain != NULL);
     
-    if(!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)) > 0){
-        set_Boite_deja_decouverte(get_regle(terrain_de_jeu), get_Boite_deja_decouverte(get_regle(terrain_de_jeu)) + 1);
-        set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne), 1);
-        if(get_Boite_deja_decouverte(get_regle(terrain_de_jeu))+get_nombre_mine(get_regle(terrain_de_jeu))==get_ligne(get_regle(terrain_de_jeu))*get_colonne(get_regle(terrain_de_jeu))){
-            set_win(get_regle(terrain_de_jeu), 1);
-            charge_image_bouton(get_bouton_new_game(terrain_de_jeu), -7);
-            decouvre_bombe(terrain_de_jeu);
+    if(!(get_Boite_decouverte(get_elem_champ_mine(terrain, ligne, colonne))) && get_mine(get_elem_champ_mine(terrain, ligne, colonne)) > 0){
+        set_Boite_deja_decouverte(get_regle(terrain), get_Boite_deja_decouverte(get_regle(terrain)) + 1);
+        set_Boite_decouverte(get_elem_champ_mine(terrain, ligne, colonne), 1);
+        if(get_Boite_deja_decouverte(get_regle(terrain))+get_nombre_mine(get_regle(terrain))==get_ligne(get_regle(terrain))*get_colonne(get_regle(terrain))){
+            set_win(get_regle(terrain), 1);
+            charge_image_bouton(get_bouton_new_game(terrain), -7);
+            decouvre_bombe(terrain);
         }
         
-        charge_image_bouton(get_bouton(terrain_de_jeu, ligne, colonne), get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)));
+        charge_image_bouton(get_bouton(terrain, ligne, colonne), get_mine(get_elem_champ_mine(terrain, ligne, colonne)));
     }
-    else if (!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && !(get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)))){
-        charge_image_bouton(get_bouton(terrain_de_jeu, ligne, colonne), 0);
-        set_Boite_deja_decouverte(get_regle(terrain_de_jeu), get_Boite_deja_decouverte(get_regle(terrain_de_jeu)) + 1);
-        set_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne), 1);
-        unsigned short colonne_max = get_ligne(get_regle(terrain_de_jeu)) - 1;
-        unsigned short ligne_max = get_colonne(get_regle(terrain_de_jeu)) - 1;
+    else if (!(get_Boite_decouverte(get_elem_champ_mine(terrain, ligne, colonne))) && !(get_mine(get_elem_champ_mine(terrain, ligne, colonne)))){
+        charge_image_bouton(get_bouton(terrain, ligne, colonne), 0);
+        set_Boite_deja_decouverte(get_regle(terrain), get_Boite_deja_decouverte(get_regle(terrain)) + 1);
+        set_Boite_decouverte(get_elem_champ_mine(terrain, ligne, colonne), 1);
+        unsigned short colonne_max = get_ligne(get_regle(terrain)) - 1;
+        unsigned short ligne_max = get_colonne(get_regle(terrain)) - 1;
         if(ligne == 0){
-            decouvre_boite(terrain_de_jeu, ligne+1, colonne);
+            decouvre_boite(terrain, ligne+1, colonne);
             if(colonne == 0){
-                decouvre_boite(terrain_de_jeu, ligne, colonne+1);
-                decouvre_boite(terrain_de_jeu, ligne + 1, colonne + 1);
+                decouvre_boite(terrain, ligne, colonne+1);
+                decouvre_boite(terrain, ligne + 1, colonne + 1);
             }
             else if(colonne == colonne_max){
-                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
-                decouvre_boite(terrain_de_jeu, ligne + 1, colonne - 1);
+                decouvre_boite(terrain, ligne, colonne-1);
+                decouvre_boite(terrain, ligne + 1, colonne - 1);
             }
             else{
-                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
-                decouvre_boite(terrain_de_jeu, ligne + 1, colonne - 1);
-                decouvre_boite(terrain_de_jeu, ligne, colonne + 1);
-                decouvre_boite(terrain_de_jeu, ligne + 1, colonne + 1);
+                decouvre_boite(terrain, ligne, colonne-1);
+                decouvre_boite(terrain, ligne + 1, colonne - 1);
+                decouvre_boite(terrain, ligne, colonne + 1);
+                decouvre_boite(terrain, ligne + 1, colonne + 1);
             }
         }
-        else if (ligne == ligne_max)
-        {
-            decouvre_boite(terrain_de_jeu, ligne - 1, colonne);
-            if (colonne == 0)
-            {
-                decouvre_boite(terrain_de_jeu, ligne, colonne+1);
-                decouvre_boite(terrain_de_jeu, ligne - 1, colonne + 1);
+        else if (ligne == ligne_max){
+            decouvre_boite(terrain, ligne - 1, colonne);
+            if (colonne == 0){
+                decouvre_boite(terrain, ligne, colonne+1);
+                decouvre_boite(terrain, ligne - 1, colonne + 1);
             }
-            else if (colonne == colonne_max)
-            {
-                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
-                decouvre_boite(terrain_de_jeu, ligne - 1, colonne - 1);
+            else if (colonne == colonne_max){
+                decouvre_boite(terrain, ligne, colonne-1);
+                decouvre_boite(terrain, ligne - 1, colonne - 1);
             }
-            else
-            {
-                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
-                decouvre_boite(terrain_de_jeu, ligne - 1, colonne - 1);
-                decouvre_boite(terrain_de_jeu, ligne, colonne+1);
-                decouvre_boite(terrain_de_jeu, ligne - 1, colonne + 1);
+            else{
+                decouvre_boite(terrain, ligne, colonne-1);
+                decouvre_boite(terrain, ligne - 1, colonne - 1);
+                decouvre_boite(terrain, ligne, colonne+1);
+                decouvre_boite(terrain, ligne - 1, colonne + 1);
             }
         }
-        else
-        {
-            decouvre_boite(terrain_de_jeu, ligne-1, colonne);
-            decouvre_boite(terrain_de_jeu, ligne+1, colonne);
+        else{
+            decouvre_boite(terrain, ligne-1, colonne);
+            decouvre_boite(terrain, ligne+1, colonne);
             if(colonne == 0){
-                decouvre_boite(terrain_de_jeu, ligne - 1, colonne + 1);
-                decouvre_boite(terrain_de_jeu, ligne, colonne+1);
-                decouvre_boite(terrain_de_jeu, ligne + 1, colonne + 1);
+                decouvre_boite(terrain, ligne - 1, colonne + 1);
+                decouvre_boite(terrain, ligne, colonne+1);
+                decouvre_boite(terrain, ligne + 1, colonne + 1);
             }
             else if(colonne == colonne_max){
-                decouvre_boite(terrain_de_jeu, ligne - 1, colonne - 1);
-                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
-                decouvre_boite(terrain_de_jeu, ligne + 1, colonne - 1);
+                decouvre_boite(terrain, ligne - 1, colonne - 1);
+                decouvre_boite(terrain, ligne, colonne-1);
+                decouvre_boite(terrain, ligne + 1, colonne - 1);
             }
             else{
-                decouvre_boite(terrain_de_jeu, ligne - 1, colonne - 1);
-                decouvre_boite(terrain_de_jeu, ligne, colonne-1);
-                decouvre_boite(terrain_de_jeu, ligne + 1, colonne - 1);
-                decouvre_boite(terrain_de_jeu, ligne - 1, colonne + 1);
-                decouvre_boite(terrain_de_jeu, ligne, colonne+1);
-                decouvre_boite(terrain_de_jeu, ligne + 1, colonne + 1);
+                decouvre_boite(terrain, ligne - 1, colonne - 1);
+                decouvre_boite(terrain, ligne, colonne-1);
+                decouvre_boite(terrain, ligne + 1, colonne - 1);
+                decouvre_boite(terrain, ligne - 1, colonne + 1);
+                decouvre_boite(terrain, ligne, colonne+1);
+                decouvre_boite(terrain, ligne + 1, colonne + 1);
             }
         }
     }
-    else if (!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)) == -1){
-        set_win(get_regle(terrain_de_jeu), -1);
-        decouvre_bombe(terrain_de_jeu);//affiche toutes les bombes mais laisse les drapeaux corrects
-        charge_image_bouton(get_bouton(terrain_de_jeu, ligne, colonne), -3);//affiche la bomb qui a explosé en rouge
-        charge_image_bouton(get_bouton_new_game(terrain_de_jeu), -6);//affiche bonhomme mort sur bouton nouvelle partie
+    else if (!(get_Boite_decouverte(get_elem_champ_mine(terrain, ligne, colonne))) && get_mine(get_elem_champ_mine(terrain, ligne, colonne)) == -1){
+        set_win(get_regle(terrain), -1);
+        decouvre_bombe(terrain);//affiche toutes les bombes mais laisse les drapeaux corrects
+        charge_image_bouton(get_bouton(terrain, ligne, colonne), -3);//affiche la bomb qui a explosé en rouge
+        charge_image_bouton(get_bouton_new_game(terrain), -6);//affiche bonhomme mort sur bouton nouvelle partie
     }
 }
 
-static void actualise_compteur_autour_de_bombe(Terrain *terrain_de_jeu, unsigned short i, unsigned short j, unsigned short ligne_max, unsigned short colonne_max){
-    assert(terrain_de_jeu != NULL);
-    
+static void actualise_compteur_autour_de_bombe(Terrain *terrain, unsigned short i, unsigned short j, unsigned short ligne_max, unsigned short colonne_max){
+    assert(terrain != NULL);
+
     if(i == 0){
-        if (get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j)) != -1)
-            set_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j), get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j)) + 1);
+        if (get_mine(get_elem_champ_mine(terrain, i+1, j)) != -1)
+            set_mine(get_elem_champ_mine(terrain, i+1, j), get_mine(get_elem_champ_mine(terrain, i+1, j)) + 1);
 
         if (j == 0){
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1), get_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j+1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j+1), get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j+1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i, j+1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i, j+1), get_mine(get_elem_champ_mine(terrain, i, j+1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i+1, j+1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i+1, j+1), get_mine(get_elem_champ_mine(terrain, i+1, j+1)) + 1);
         }
         else if(j == colonne_max){
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i+1,j-1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j-1), get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j-1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1), get_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i+1,j-1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i+1, j-1), get_mine(get_elem_champ_mine(terrain, i+1, j-1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i, j-1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i, j-1), get_mine(get_elem_champ_mine(terrain, i, j-1)) + 1);
         }
         else{
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1), get_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j+1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j+1), get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j+1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j-1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j-1), get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j-1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1), get_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i, j+1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i, j+1), get_mine(get_elem_champ_mine(terrain, i, j+1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i+1, j+1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i+1, j+1), get_mine(get_elem_champ_mine(terrain, i+1, j+1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i+1, j-1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i+1, j-1), get_mine(get_elem_champ_mine(terrain, i+1, j-1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i, j-1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i, j-1), get_mine(get_elem_champ_mine(terrain, i, j-1)) + 1);
         }  
     }
     else if(i == ligne_max){
-        if (get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j)) != -1)
-            set_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j), get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j)) + 1);
+        if (get_mine(get_elem_champ_mine(terrain, i-1, j)) != -1)
+            set_mine(get_elem_champ_mine(terrain, i-1, j), get_mine(get_elem_champ_mine(terrain, i-1, j)) + 1);
 
-        if (j == 0)
-        {
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1), get_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j+1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j+1), get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j+1)) + 1);
+        if (j == 0){
+            if (get_mine(get_elem_champ_mine(terrain, i, j+1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i, j+1), get_mine(get_elem_champ_mine(terrain, i, j+1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i-1, j+1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i-1, j+1), get_mine(get_elem_champ_mine(terrain, i-1, j+1)) + 1);
         }
-        else if (j == colonne_max)
-        {
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j-1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j-1), get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j-1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1), get_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1)) + 1);
+        else if (j == colonne_max){
+            if (get_mine(get_elem_champ_mine(terrain, i-1, j-1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i-1, j-1), get_mine(get_elem_champ_mine(terrain, i-1, j-1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i, j-1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i, j-1), get_mine(get_elem_champ_mine(terrain, i, j-1)) + 1);
         }
-        else
-        {
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1), get_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j+1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j+1), get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j+1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j-1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j-1), get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j-1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1), get_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1)) + 1);
+        else{
+            if (get_mine(get_elem_champ_mine(terrain, i, j+1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i, j+1), get_mine(get_elem_champ_mine(terrain, i, j+1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i-1, j+1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i-1, j+1), get_mine(get_elem_champ_mine(terrain, i-1, j+1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i-1, j-1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i-1, j-1), get_mine(get_elem_champ_mine(terrain, i-1, j-1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i, j-1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i, j-1), get_mine(get_elem_champ_mine(terrain, i, j-1)) + 1);
         }
     }
     else{
-        if (get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j)) != -1)
-            set_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j), get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j)) + 1);
-        if (get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j)) != -1)
-            set_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j), get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j)) + 1);
+        if (get_mine(get_elem_champ_mine(terrain, i-1, j)) != -1)
+            set_mine(get_elem_champ_mine(terrain, i-1, j), get_mine(get_elem_champ_mine(terrain, i-1, j)) + 1);
+        if (get_mine(get_elem_champ_mine(terrain, i+1, j)) != -1)
+            set_mine(get_elem_champ_mine(terrain, i+1, j), get_mine(get_elem_champ_mine(terrain, i+1, j)) + 1);
         if(j == 0){
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j+1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j+1), get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j+1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1), get_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j+1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j+1), get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j+1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i-1, j+1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i-1, j+1), get_mine(get_elem_champ_mine(terrain, i-1, j+1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i, j+1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i, j+1), get_mine(get_elem_champ_mine(terrain, i, j+1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i+1, j+1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i+1, j+1), get_mine(get_elem_champ_mine(terrain, i+1, j+1)) + 1);
         }
         else if(j == colonne_max){
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j-1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j-1), get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j-1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1), get_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j-1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j-1), get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j-1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i-1, j-1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i-1, j-1), get_mine(get_elem_champ_mine(terrain, i-1, j-1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i, j-1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i, j-1), get_mine(get_elem_champ_mine(terrain, i, j-1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i+1, j-1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i+1, j-1), get_mine(get_elem_champ_mine(terrain, i+1, j-1)) + 1);
         }
         else{
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j-1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j-1), get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j-1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1), get_mine(get_elem_champ_mine(terrain_de_jeu, i, j-1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j-1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j-1), get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j-1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j+1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j+1), get_mine(get_elem_champ_mine(terrain_de_jeu, i-1, j+1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1), get_mine(get_elem_champ_mine(terrain_de_jeu, i, j+1)) + 1);
-            if (get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j+1)) != -1)
-                set_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j+1), get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j+1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i-1, j-1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i-1, j-1), get_mine(get_elem_champ_mine(terrain, i-1, j-1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i, j-1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i, j-1), get_mine(get_elem_champ_mine(terrain, i, j-1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i+1, j-1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i+1, j-1), get_mine(get_elem_champ_mine(terrain, i+1, j-1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i-1, j+1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i-1, j+1), get_mine(get_elem_champ_mine(terrain, i-1, j+1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i, j+1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i, j+1), get_mine(get_elem_champ_mine(terrain, i, j+1)) + 1);
+            if (get_mine(get_elem_champ_mine(terrain, i+1, j+1)) != -1)
+                set_mine(get_elem_champ_mine(terrain, i+1, j+1), get_mine(get_elem_champ_mine(terrain, i+1, j+1)) + 1);
         }
-
-
     }
 
 }
 
-void mode_debutant(Terrain *terrain_de_jeu){
-    destructeur_champ_mine(get_champ_mine(terrain_de_jeu), get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu)));
-    set_ligne(get_regle(terrain_de_jeu), NBR_LIGNE_DEBUTANT);
-    set_colonne(get_regle(terrain_de_jeu), NBR_COLONNE_DEBUTANT);
-    set_temps(get_regle(terrain_de_jeu), TEMPS_DEBUTANT);
-    set_nombre_mine(get_regle(terrain_de_jeu), NBR_MINE_DEBUTANT);
-    set_champ_mine(terrain_de_jeu, constructeur_champ_mine(get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu))));
-    nouvelle_partie(terrain_de_jeu);
+void mode_debutant(Terrain *terrain){
+    assert(terrain!=NULL);
+
+    destructeur_champ_mine(get_champ_mine(terrain), get_ligne(get_regle(terrain)), get_colonne(get_regle(terrain)));
+    set_ligne(get_regle(terrain), NBR_LIGNE_DEBUTANT);
+    set_colonne(get_regle(terrain), NBR_COLONNE_DEBUTANT);
+    set_temps(get_regle(terrain), TEMPS_DEBUTANT);
+    set_nombre_mine(get_regle(terrain), NBR_MINE_DEBUTANT);
+    set_champ_mine(terrain, constructeur_champ_mine(get_ligne(get_regle(terrain)), get_colonne(get_regle(terrain))));
+    nouvelle_partie(terrain);
 }
 
-void mode_intermediaire(Terrain *terrain_de_jeu){
-    destructeur_champ_mine(get_champ_mine(terrain_de_jeu), get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu)));
-    set_ligne(get_regle(terrain_de_jeu), NBR_LIGNE_INTERMEDIAIRE);
-    set_colonne(get_regle(terrain_de_jeu), NBR_COLONNE_INTERMEDIAIRE);
-    set_temps(get_regle(terrain_de_jeu), TEMPS_INTERMEDIAIRE);
-    set_nombre_mine(get_regle(terrain_de_jeu), NBR_MINE_INTERMEDIAIRE);
-    set_champ_mine(terrain_de_jeu, constructeur_champ_mine(get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu))));
-    nouvelle_partie(terrain_de_jeu);
+void mode_intermediaire(Terrain *terrain){
+    assert(terrain!=NULL);
+
+    destructeur_champ_mine(get_champ_mine(terrain), get_ligne(get_regle(terrain)), get_colonne(get_regle(terrain)));
+    set_ligne(get_regle(terrain), NBR_LIGNE_INTERMEDIAIRE);
+    set_colonne(get_regle(terrain), NBR_COLONNE_INTERMEDIAIRE);
+    set_temps(get_regle(terrain), TEMPS_INTERMEDIAIRE);
+    set_nombre_mine(get_regle(terrain), NBR_MINE_INTERMEDIAIRE);
+    set_champ_mine(terrain, constructeur_champ_mine(get_ligne(get_regle(terrain)), get_colonne(get_regle(terrain))));
+    nouvelle_partie(terrain);
 }
 
-void mode_expert(Terrain *terrain_de_jeu){
-    destructeur_champ_mine(get_champ_mine(terrain_de_jeu), get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu)));
-    set_ligne(get_regle(terrain_de_jeu), NBR_LIGNE_EXPERT);
-    set_colonne(get_regle(terrain_de_jeu), NBR_COLONNE_EXPERT);
-    set_temps(get_regle(terrain_de_jeu), TEMPS_EXPERT);
-    set_nombre_mine(get_regle(terrain_de_jeu), NBR_MINE_EXPERT);
-    set_champ_mine(terrain_de_jeu, constructeur_champ_mine(get_ligne(get_regle(terrain_de_jeu)), get_colonne(get_regle(terrain_de_jeu))));
-    nouvelle_partie(terrain_de_jeu);
+void mode_expert(Terrain *terrain){
+    assert(terrain!=NULL);
+    
+    destructeur_champ_mine(get_champ_mine(terrain), get_ligne(get_regle(terrain)), get_colonne(get_regle(terrain)));
+    set_ligne(get_regle(terrain), NBR_LIGNE_EXPERT);
+    set_colonne(get_regle(terrain), NBR_COLONNE_EXPERT);
+    set_temps(get_regle(terrain), TEMPS_EXPERT);
+    set_nombre_mine(get_regle(terrain), NBR_MINE_EXPERT);
+    set_champ_mine(terrain, constructeur_champ_mine(get_ligne(get_regle(terrain)), get_colonne(get_regle(terrain))));
+    nouvelle_partie(terrain);
 }
 
 void decouvre_bombe(Terrain *terrain){

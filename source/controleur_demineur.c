@@ -29,41 +29,49 @@ static void reinitialise_fenetre_nouvelle_pvbox(Data_for_Callback *data);
 
 void click_difficulte_debutant(GtkWidget *pButton, gpointer data){
     assert(data!=NULL);
-
     pButton+=0;
+
     Data_for_Callback *recup_data = data;
+    GtkWidget *pFenetre = get_fenetre(recup_data);
+
     mode_debutant(get_Terrain(recup_data));
     reinitialise_fenetre_nouvelle_pvbox(recup_data);
-    gtk_window_resize(GTK_WINDOW(get_fenetre(recup_data)), 300, 400);
-    gtk_widget_show_all(get_fenetre(recup_data));
+    gtk_window_resize(GTK_WINDOW(pFenetre), 300, 400);
+    gtk_widget_show_all(pFenetre);
 }
 
 void click_difficulte_intermediaire(GtkWidget *pButton, gpointer data){
     assert(data!=NULL);
-
     pButton+=0;
+
     Data_for_Callback *recup_data = data;
+    GtkWidget *pFenetre = get_fenetre(recup_data);
+    
     mode_intermediaire(get_Terrain(recup_data));
     reinitialise_fenetre_nouvelle_pvbox(recup_data);
-    gtk_window_resize(GTK_WINDOW(get_fenetre(recup_data)), 600, 700);
-    gtk_widget_show_all(get_fenetre(recup_data));
+    gtk_window_resize(GTK_WINDOW(pFenetre), 600, 700);
+    gtk_widget_show_all(pFenetre);
 }
 
 void click_difficulte_expert(GtkWidget *pButton, gpointer data){
     assert(data!=NULL);
-
     pButton+=0;
+
     Data_for_Callback *recup_data = data;
+    GtkWidget *pFenetre = get_fenetre(recup_data);
+
     mode_expert(get_Terrain(recup_data));
     reinitialise_fenetre_nouvelle_pvbox(recup_data);
-    gtk_window_resize(GTK_WINDOW(get_fenetre(recup_data)), 1000, 1100);
-    gtk_widget_show_all(get_fenetre(recup_data));
+    gtk_window_resize(GTK_WINDOW(pFenetre), 1000, 1100);
+    gtk_widget_show_all(pFenetre);
 }
 
 static void reinitialise_fenetre_nouvelle_pvbox(Data_for_Callback *data){
-    GtkWidget *pVBox = structure_box(get_fenetre(data), get_Terrain(data), get_tableau_bouton(get_Terrain(data)), get_bouton_new_game(get_Terrain(data)));
-    gtk_container_foreach (GTK_CONTAINER (get_fenetre(data)), (GtkCallback) gtk_widget_destroy, NULL);
-    gtk_container_add(GTK_CONTAINER(get_fenetre(data)), pVBox);
+    GtkWidget *pFenetre = get_fenetre(data);
+
+    GtkWidget *pVBox = structure_box(pFenetre, get_Terrain(data), get_tableau_bouton(get_Terrain(data)), get_bouton_new_game(get_Terrain(data)));
+    gtk_container_foreach (GTK_CONTAINER (pFenetre), (GtkCallback) gtk_widget_destroy, NULL);
+    gtk_container_add(GTK_CONTAINER(pFenetre), pVBox);
 }
 
 void click_decouvre_case(GtkWidget *pButton, GdkEventButton *type_click, gpointer data){
@@ -118,9 +126,11 @@ void click_nouvelle_partie(GtkWidget *pButton, gpointer data){
     pButton+=0;
 
     Data_for_Callback *recup_data = data;
-    nouvelle_partie(get_Terrain(recup_data));
-    reinitialise_image_bouton(get_Terrain(recup_data));
-    charge_image_bouton(get_bouton_new_game(get_Terrain(recup_data)), -5);
+    Terrain *terrain = get_Terrain(recup_data);
+
+    nouvelle_partie(terrain);
+    reinitialise_image_bouton(terrain);
+    charge_image_bouton(get_bouton_new_game(terrain), -5);
     gtk_widget_show_all(get_fenetre(recup_data));
 }
 

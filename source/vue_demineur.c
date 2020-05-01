@@ -18,9 +18,16 @@
 #include "vue_demineur.h"
 #include "controleur_demineur.h"
 
+/**
+ * \fn popup_close(GtkWidget *pButton, gpointer data)
+ * \brief fonction callback de fermeture de la fenetre popup
+ * 
+ */
 static void popup_close(GtkWidget *pButton, gpointer data);
 
 GtkWidget *creation_fenetre(Terrain *terrain){
+    assert(terrain!=NULL);
+
     GtkWidget *pFenetre = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(pFenetre), "Démineur");
     gtk_window_resize(GTK_WINDOW(pFenetre), get_ligne(get_regle(terrain))*35, (get_colonne(get_regle(terrain))*35)+100);
@@ -28,6 +35,8 @@ GtkWidget *creation_fenetre(Terrain *terrain){
 }
 
 GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain){
+    assert(pFenetre!=NULL && terrain!=NULL);
+
     //Déclaration des variables
     GtkWidget *barre_menu;
 
@@ -104,6 +113,9 @@ GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain){
 }
 
 GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pButton, GtkWidget *pButton_new_game){
+    assert(pFenetre!=NULL && terrain!=NULL);
+    
+    
     char texte_nbr_mine[4];
     int nombre_ligne = get_ligne(get_regle(terrain)), nombre_colonne = get_colonne(get_regle(terrain));
    
@@ -162,6 +174,7 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pBut
 
 int charge_image_bouton(GtkWidget *pButton, int numero_image){
     assert(pButton!=NULL);
+
     GdkPixbuf *pb_temp, *emeline_la_boss;
     GtkWidget *image;
     // 1. Charger l’image et la redimensionner (20*20 pixels)
@@ -214,6 +227,9 @@ int charge_image_bouton(GtkWidget *pButton, int numero_image){
         case -7://image new_game gagné
             pb_temp = gdk_pixbuf_new_from_file("images/Bonhomme4.bmp", NULL);
             break;
+        default:
+            return -1;
+            break;
     }
 
     if(pb_temp == NULL)
@@ -231,6 +247,8 @@ int charge_image_bouton(GtkWidget *pButton, int numero_image){
 } // fin charge_image_bouton()
 
 void reinitialise_image_bouton(Terrain *terrain){
+    assert(terrain!=NULL);
+
     unsigned int ligne = get_ligne(get_regle(terrain)), colonne = get_colonne(get_regle(terrain));
     
     for(unsigned int i=0; i<ligne; i++){
