@@ -161,13 +161,15 @@ void decouvre_boite(Terrain *terrain_de_jeu, unsigned int ligne, unsigned int co
     }
     else if (!(get_Boite_decouverte(get_elem_champ_mine(terrain_de_jeu, ligne, colonne))) && get_mine(get_elem_champ_mine(terrain_de_jeu, ligne, colonne)) == -1){
         set_win(get_regle(terrain_de_jeu), -1);
-        decouvre_bombe(terrain_de_jeu);
-        charge_image_bouton(get_bouton_new_game(terrain_de_jeu), -6);
+        decouvre_bombe(terrain_de_jeu);//affiche toutes les bombes mais laisse les drapeaux corrects
+        charge_image_bouton(get_bouton(terrain_de_jeu, ligne, colonne), -3);//affiche la bomb qui a explosé en rouge
+        charge_image_bouton(get_bouton_new_game(terrain_de_jeu), -6);//affiche bonhomme mort sur bouton nouvelle partie
     }
 }
 
 static void actualise_compteur_autour_de_bombe(Terrain *terrain_de_jeu, unsigned short i, unsigned short j, unsigned short ligne_max, unsigned short colonne_max){
     assert(terrain_de_jeu != NULL);
+    
     if(i == 0){
         if (get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j)) != -1)
             set_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j), get_mine(get_elem_champ_mine(terrain_de_jeu, i+1, j)) + 1);
@@ -306,8 +308,10 @@ void decouvre_bombe(Terrain *terrain){
                 derniere_coord_bombe_devoilee[1]=0;
                 derniere_coord_bombe_devoilee[0]++;
             }
+            if(get_Boite_decouverte(get_elem_champ_mine(terrain, derniere_coord_bombe_devoilee[0], derniere_coord_bombe_devoilee[1]))==-1)
+                charge_image_bouton(get_bouton(terrain, derniere_coord_bombe_devoilee[0], derniere_coord_bombe_devoilee[1]), -2);
         }
-        if(get_win(get_regle(terrain))==-1)
+        if(get_win(get_regle(terrain))==-1 && get_Boite_decouverte(get_elem_champ_mine(terrain, derniere_coord_bombe_devoilee[0], derniere_coord_bombe_devoilee[1]))!=-1)
             charge_image_bouton(get_bouton(terrain, derniere_coord_bombe_devoilee[0], derniere_coord_bombe_devoilee[1]), -1);
         else
             charge_image_bouton(get_bouton(terrain, derniere_coord_bombe_devoilee[0], derniere_coord_bombe_devoilee[1]), -4);

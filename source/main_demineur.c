@@ -85,9 +85,11 @@ int main(int argc, char **argv){
     GtkWidget *pFenetre;
     GtkWidget *pVBox;
     GtkWidget *pTab_button[900];
-    GtkWidget *pButton_new_game;
+    GtkWidget *pButton_new_game = gtk_button_new();
+    // GtkWidget *pLabel_timer = gtk_label_new(NULL);
 
     gtk_init(&argc, &argv);
+
     //Initialisation de la fenetre et affichage
     pFenetre = creation_fenetre(terrain);
     g_signal_connect(G_OBJECT(pFenetre), "destroy", G_CALLBACK(gtk_main_quit), NULL);
@@ -96,6 +98,8 @@ int main(int argc, char **argv){
     gtk_widget_show_all(pFenetre);
 
     gtk_main();
+
+    destructeur_Terrain(terrain);
 
     return EXIT_SUCCESS;
 }//fin programme

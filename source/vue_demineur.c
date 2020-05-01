@@ -113,11 +113,11 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pBut
     GtkWidget *pHBox_champ_mine[get_ligne(get_regle(terrain))];
 
     //Initialisation boutons
-    sprintf(texte_nbr_mine, "%hu", get_nombre_mine(get_regle(terrain)));
-    pButton_new_game = gtk_button_new();
     gtk_widget_set_size_request(pButton_new_game, 35, 35);
+    pButton_new_game = gtk_button_new();
 
     //Initialisation labels
+    sprintf(texte_nbr_mine, "%hu", get_nombre_mine(get_regle(terrain)));
     GtkWidget *pLabel_nbr_mine = gtk_label_new(texte_nbr_mine);
     GtkWidget *pLabel_timer = gtk_label_new("60");
 
@@ -197,10 +197,10 @@ int charge_image_bouton(GtkWidget *pButton, int numero_image){
             pb_temp = gdk_pixbuf_new_from_file("images/Bomb1.bmp", NULL);
             break;
         case -2://bombe barrée -> si lorsque perdu car cliqué sur bombe, un drapeau se trouvait sur une case sans bombe
-            pb_temp = gdk_pixbuf_new_from_file("images/Bomb2.bmp", NULL);
+            pb_temp = gdk_pixbuf_new_from_file("images/Bomb3.bmp", NULL);
             break;
         case -3://bombe rouge -> celle qui a explosée
-            pb_temp = gdk_pixbuf_new_from_file("images/Bomb1.bmp", NULL);
+            pb_temp = gdk_pixbuf_new_from_file("images/Bomb2.bmp", NULL);
             break;
         case -4://drapeau
             pb_temp = gdk_pixbuf_new_from_file("images/flag.png", NULL);
@@ -243,14 +243,15 @@ void fenetre_pop_up_a_propos(void){
     GtkWidget *pPopup = gtk_window_new(GTK_WINDOW_POPUP);
     GtkWidget *pVBox = gtk_vbox_new(TRUE, 0);
     GtkWidget *pHBox = gtk_hbox_new(TRUE, 0);
-    GtkWidget *pLabel = gtk_label_new("Demineur\nCréateur : Randaxhe Martin & Russe Cyril\nINFO0030--30/04/19");
+    GtkWidget *pLabel = gtk_label_new("Demineur\nCréateur : Randaxhe Martin & Russe Cyril\nINFO0030 -- 30/04/19");
+    gtk_label_set_justify(GTK_LABEL(pLabel), GTK_JUSTIFY_CENTER);
     GtkWidget *pButton_ok = gtk_button_new_with_label("ok");
 
-    gtk_window_set_default_size(GTK_WINDOW(pPopup), 500, 150);
+    gtk_window_set_default_size(GTK_WINDOW(pPopup), 400, 150);
     gtk_window_move(GTK_WINDOW(pPopup), 550, 420);
     gtk_box_pack_start(GTK_BOX(pVBox), pLabel, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pVBox), pHBox, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(pHBox), pButton_ok, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(pHBox), pButton_ok, TRUE, TRUE, 0);
 
     gtk_container_add(GTK_CONTAINER(pPopup), pVBox);
 

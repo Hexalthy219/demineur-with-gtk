@@ -126,6 +126,7 @@ void click_nouvelle_partie(GtkWidget *pButton, gpointer data){
 
 void click_a_propos(GtkWidget *pButton, gpointer data){
     pButton+=0;
+    data=data;
 
     fenetre_pop_up_a_propos();
 }
