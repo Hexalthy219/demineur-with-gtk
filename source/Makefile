@@ -61,6 +61,14 @@ clean_latex:
 clean_doc:
 	rm -r doc
 
+#rapport
+rapport:all_rapport clean_rapport
+
+all_rapport:
+	cd ../rapport && pdflatex rapport_demineur.tex
+clean_rapport:
+	cd ../rapport && rm rapport_demineur.aux rapport_demineur.log
+
 #création archive
 archive:
 	tar -zcvf 
