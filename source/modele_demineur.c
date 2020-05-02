@@ -46,7 +46,8 @@ void nouvelle_partie(Terrain *terrain){
     aleatoire_bombe_et_compteur(terrain);
     set_Boite_deja_decouverte(regle, 0);
     set_win(regle, 0);
-}
+    Initialisation_timer(terrain);
+}//fin nouvelle_partie
 
 void initialisation_0(Terrain *terrain){
     assert(terrain != NULL);
@@ -58,7 +59,7 @@ void initialisation_0(Terrain *terrain){
             set_mine(get_elem_champ_mine(terrain, i, j), 0);
         }
     }
-}
+}//fin initialisation_0
 
 void aleatoire_bombe_et_compteur(Terrain *terrain){
     assert(terrain != NULL);
@@ -77,7 +78,7 @@ void aleatoire_bombe_et_compteur(Terrain *terrain){
             k++;
         }
     }
-}
+}//fin aleatoire_bombe_et_compteur
 
 void decouvre_boite(Terrain *terrain, unsigned int ligne, unsigned int colonne){
     assert(terrain != NULL);
@@ -162,7 +163,7 @@ void decouvre_boite(Terrain *terrain, unsigned int ligne, unsigned int colonne){
         charge_image_bouton(get_bouton(terrain, ligne, colonne), -3);//affiche la bomb qui a explosé en rouge
         charge_image_bouton(get_bouton_new_game(terrain), -6);//affiche bonhomme mort sur bouton nouvelle partie
     }
-}
+}//fin decouvre_boite
 
 static void actualise_compteur_autour_de_bombe(Terrain *terrain, unsigned short i, unsigned short j, unsigned short ligne_max, unsigned short colonne_max){
     assert(terrain != NULL);
@@ -258,7 +259,7 @@ static void actualise_compteur_autour_de_bombe(Terrain *terrain, unsigned short 
         }
     }
 
-}
+}//fin actualise_compteur_autour_de_bombe
 
 void mode_debutant(Terrain *terrain){
     assert(terrain!=NULL);
@@ -270,7 +271,7 @@ void mode_debutant(Terrain *terrain){
     set_nombre_mine(get_regle(terrain), NBR_MINE_DEBUTANT);
     set_champ_mine(terrain, constructeur_champ_mine(get_ligne(get_regle(terrain)), get_colonne(get_regle(terrain))));
     nouvelle_partie(terrain);
-}
+}//fin mode_debutant
 
 void mode_intermediaire(Terrain *terrain){
     assert(terrain!=NULL);
@@ -282,7 +283,7 @@ void mode_intermediaire(Terrain *terrain){
     set_nombre_mine(get_regle(terrain), NBR_MINE_INTERMEDIAIRE);
     set_champ_mine(terrain, constructeur_champ_mine(get_ligne(get_regle(terrain)), get_colonne(get_regle(terrain))));
     nouvelle_partie(terrain);
-}
+}//fin mode_intermediaire
 
 void mode_expert(Terrain *terrain){
     assert(terrain!=NULL);
@@ -294,7 +295,7 @@ void mode_expert(Terrain *terrain){
     set_nombre_mine(get_regle(terrain), NBR_MINE_EXPERT);
     set_champ_mine(terrain, constructeur_champ_mine(get_ligne(get_regle(terrain)), get_colonne(get_regle(terrain))));
     nouvelle_partie(terrain);
-}
+}//fin mode_expert
 
 void decouvre_bombe(Terrain *terrain){
     unsigned int derniere_coord_bombe_devoilee[2] = {0};
@@ -309,7 +310,7 @@ void decouvre_bombe(Terrain *terrain){
             if(get_Boite_decouverte(get_elem_champ_mine(terrain, derniere_coord_bombe_devoilee[0], derniere_coord_bombe_devoilee[1]))==-1)
                 charge_image_bouton(get_bouton(terrain, derniere_coord_bombe_devoilee[0], derniere_coord_bombe_devoilee[1]), -2);
         }
-        if(get_win(get_regle(terrain))==-1 && get_Boite_decouverte(get_elem_champ_mine(terrain, derniere_coord_bombe_devoilee[0], derniere_coord_bombe_devoilee[1]))!=-1)
+        if(get_win(get_regle(terrain))==-1 && get_Boite_decouverte(get_elem_champ_mine(terrain, derniere_coord_bombe_devoilee[0], derniere_coord_bombe_devoilee[1]))!=-1)//si perdu 
             charge_image_bouton(get_bouton(terrain, derniere_coord_bombe_devoilee[0], derniere_coord_bombe_devoilee[1]), -1);
         else
             charge_image_bouton(get_bouton(terrain, derniere_coord_bombe_devoilee[0], derniere_coord_bombe_devoilee[1]), -4);
@@ -318,15 +319,17 @@ void decouvre_bombe(Terrain *terrain){
             derniere_coord_bombe_devoilee[1]=0;
             derniere_coord_bombe_devoilee[0]++;
         }
+        if(get_Boite_decouverte(get_elem_champ_mine(terrain, derniere_coord_bombe_devoilee[0], derniere_coord_bombe_devoilee[1]))==-1)
+            charge_image_bouton(get_bouton(terrain, derniere_coord_bombe_devoilee[0], derniere_coord_bombe_devoilee[1]), -2);
     }
-}
+}//fin decouvre_bombe
 
 int verifie_correspondance_nombre_drapeau_nombre_mine(Terrain *terrain, unsigned short i, unsigned short j){
     if(nombre_drapeau_autour(terrain, i, j)==get_mine(get_elem_champ_mine(terrain, i, j)))
         return 1;
     else
         return 0;
-}
+}//fin verifie_correspondance_nombre_drapeau_nombre_mine
 
 static int nombre_drapeau_autour(Terrain *terrain, unsigned short i, unsigned short j){
     int nombre_drapeau=0;
@@ -366,4 +369,47 @@ static int nombre_drapeau_autour(Terrain *terrain, unsigned short i, unsigned sh
     }
 
     return nombre_drapeau;
+}//fin nombre_drapeau_autour
+
+void Initialisation_timer(Terrain *terrain){
+    assert(terrain!=NULL);
+    char texte[4];
+    Timer *timer = get_timer(terrain);
+    GtkWidget *pLabel = get_label_timer(timer);
+    Regle *regle = get_regle(terrain);
+
+    sprintf(texte,"%d", get_temps(regle));
+    
+    set_temps_restant(timer, get_temps(get_regle(terrain)));
+    set_timer_lance(timer, 0);
+    gtk_label_set_text(GTK_LABEL(pLabel), texte);
+    
+}//fin Initialisation_timer
+
+void demarre_timer(Terrain *terrain){
+    assert(terrain!=NULL);
+
+    g_timeout_add(1000, tic, (gpointer)terrain);
+}
+
+gint tic(gpointer data){
+    assert(data!=NULL);
+
+    Terrain *terrain = data;
+    Timer *timer = get_timer(terrain);
+    if(get_temps_restant(timer)>0 && get_win(get_regle(terrain))==0 && get_timer_lance(timer)==1)
+        g_timeout_add(1000, tic, (gpointer)terrain);
+    else
+        return 0;
+
+    set_temps_restant(timer, get_temps_restant(timer)-1);
+    maj_timer(timer);
+
+    if(get_temps_restant(timer)==0){
+        set_win(get_regle(terrain), -1);
+        decouvre_bombe(terrain);
+        charge_image_bouton(get_bouton_new_game(terrain), -6);
+    }
+
+    return 0;
 }

@@ -116,4 +116,10 @@ void decouvre_bombe(Terrain *terrain);
  */
 int verifie_correspondance_nombre_drapeau_nombre_mine(Terrain *terrain, unsigned short i, unsigned short j);
 
+void Initialisation_timer(Terrain *terrain);
+
+void demarre_timer(Terrain *terrain);
+
+gint tic(gpointer data);
+
 #endif

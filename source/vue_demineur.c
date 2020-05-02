@@ -31,8 +31,9 @@ GtkWidget *creation_fenetre(Terrain *terrain){
     GtkWidget *pFenetre = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(pFenetre), "Démineur");
     gtk_window_resize(GTK_WINDOW(pFenetre), get_ligne(get_regle(terrain))*35, (get_colonne(get_regle(terrain))*35)+100);
+    g_signal_connect(G_OBJECT(pFenetre), "destroy", G_CALLBACK(gtk_main_quit), NULL);
     return pFenetre;
-}
+}//fin creation_fenetre
 
 GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain){
     assert(pFenetre!=NULL && terrain!=NULL);
@@ -110,7 +111,7 @@ GtkWidget *creation_menus(GtkWidget *pFenetre, Terrain *terrain){
     g_signal_connect(G_OBJECT(item_info_createur), "activate", G_CALLBACK(click_a_propos), NULL);
 
     return barre_menu;
-}
+}//fin creation_menus
 
 GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pButton, GtkWidget *pButton_new_game){
     assert(pFenetre!=NULL && terrain!=NULL);
@@ -131,7 +132,6 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pBut
     //Initialisation labels
     sprintf(texte_nbr_mine, "%hu", get_nombre_mine(get_regle(terrain)));
     GtkWidget *pLabel_nbr_mine = gtk_label_new(texte_nbr_mine);
-    GtkWidget *pLabel_timer = gtk_label_new("60");
 
     //Initialisation barre menu
     GtkWidget *pBarre_menu = creation_menus(pFenetre, terrain);
@@ -141,7 +141,7 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pBut
     gtk_box_pack_start(GTK_BOX(pVBox), pHBox_info, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_nbr_mine, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(pHBox_info), pButton_new_game, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(pHBox_info), pLabel_timer, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(pHBox_info), get_label_timer(get_timer(terrain)), TRUE, TRUE, 0);
 
     
     unsigned int tab_coord[2];
@@ -170,7 +170,7 @@ GtkWidget *structure_box(GtkWidget *pFenetre, Terrain *terrain, GtkWidget **pBut
     g_signal_connect(G_OBJECT(pButton_new_game), "clicked", G_CALLBACK(click_nouvelle_partie), (gpointer)data_nouvelle_partie);
 
     return pVBox;
-}
+}//fin structure_box
 
 int charge_image_bouton(GtkWidget *pButton, int numero_image){
     assert(pButton!=NULL);
@@ -255,7 +255,7 @@ void reinitialise_image_bouton(Terrain *terrain){
         for(unsigned int j=0; j<colonne; j++)
             gtk_button_set_image(GTK_BUTTON(get_bouton(terrain, i, j)), NULL);
     }
-}
+}//fin reinitialise_image_bouton
 
 void fenetre_pop_up_a_propos(void){
     GtkWidget *pPopup = gtk_window_new(GTK_WINDOW_POPUP);
@@ -276,10 +276,19 @@ void fenetre_pop_up_a_propos(void){
     g_signal_connect(G_OBJECT(pButton_ok), "clicked", G_CALLBACK(popup_close), (gpointer)pPopup);
 
     gtk_widget_show_all(pPopup);
-}
+}//fin fenetre_pop_up_a_propos
 
 static void popup_close(GtkWidget *pButton, gpointer data){
     GtkWidget *recup_data = data;
     pButton = pButton;//inutile, mais sinon warning "unused variable à la compilation"
     gtk_widget_destroy(recup_data);
 }//fin popup_close
+
+void maj_timer(Timer *timer){
+    assert(timer!=NULL);
+    char texte[4];
+
+    GtkWidget *label = get_label_timer(timer);
+    sprintf(texte, "%d", get_temps_restant(timer));
+    gtk_label_set_text(GTK_LABEL(label), texte);
+}

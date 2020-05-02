@@ -77,22 +77,32 @@ int main(int argc, char **argv){
 
     //Initialisation du terrain et du champ de mine
     Terrain *terrain = constructeur_Terrain(get_ligne(recup_arg), get_colonne(recup_arg), get_temps(recup_arg), get_nombre_mine(recup_arg));
-    destructeur_Regle(recup_arg);
-    if (terrain==NULL)
+    if (terrain==NULL){
+        destructeur_Regle(recup_arg);
         return EXIT_FAILURE;
-    nouvelle_partie(terrain);
+    }
+    Timer *timer = constructeur_Timer(get_temps(recup_arg));
+    destructeur_Regle(recup_arg);
+    if (timer==NULL){
+        destructeur_Terrain(terrain);
+        return EXIT_FAILURE;
+    }
 
     GtkWidget *pFenetre;
     GtkWidget *pVBox;
     GtkWidget *pTab_button[900];
     GtkWidget *pButton_new_game = gtk_button_new();
-    // GtkWidget *pLabel_timer = gtk_label_new(NULL);
+    GtkWidget *pLabel_timer = gtk_label_new(NULL);
+
+    set_timer_label(timer, pLabel_timer);
+    set_timer(terrain, timer);
+
+    nouvelle_partie(terrain);
 
     gtk_init(&argc, &argv);
 
     //Initialisation de la fenetre et affichage
     pFenetre = creation_fenetre(terrain);
-    g_signal_connect(G_OBJECT(pFenetre), "destroy", G_CALLBACK(gtk_main_quit), NULL);
     pVBox = structure_box(pFenetre, terrain, pTab_button, pButton_new_game);
     gtk_container_add(GTK_CONTAINER(pFenetre), pVBox);
     gtk_widget_show_all(pFenetre);

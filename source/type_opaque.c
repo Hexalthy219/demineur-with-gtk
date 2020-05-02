@@ -31,6 +31,7 @@ struct Regle_t{
 struct Terrain_t{
     Boite ***champ_mine;
     Regle *regle;
+    Timer *timer;
     GtkWidget **pTableau_bouton;
     GtkWidget *pBouton_new_game;
 };
@@ -40,6 +41,64 @@ struct Data_for_Callback_t{
     GtkWidget *pFenetre;
     unsigned int coord_boutton[2];
 };
+
+struct Timer_t{
+    int temps_restant;
+    int timer_lance;
+    GtkWidget *pLabel;
+};
+
+Timer *constructeur_Timer(int temps_restant){
+    Timer *timer = malloc(sizeof(Timer));
+    if(timer==NULL)
+        return NULL;
+    timer->temps_restant = temps_restant;
+
+    return timer;
+}//fin constructeur_Timer
+
+void destructeur_Timer(Timer *timer){
+    if(timer==NULL)
+        return;
+    free(timer);
+    timer=NULL;
+}//fin destructeur_Timer
+
+int get_temps_restant(Timer *recup){
+    assert(recup!=NULL);
+
+    return recup->temps_restant;
+}//fin get_temps_restant
+
+int get_timer_lance(Timer *recup){
+    assert(recup!=NULL);
+
+    return recup->timer_lance;
+}//fin get_timer_lance
+
+GtkWidget *get_label_timer(Timer *recup){
+    assert(recup!=NULL);
+
+    return recup->pLabel;
+}//fin get_label_timer
+
+void set_temps_restant(Timer *change, int temps_restant){
+    assert(change!=NULL);
+
+    change->temps_restant = temps_restant;
+}//fin set_temps_restant
+
+void set_timer_lance(Timer *change, int timer_lance){
+    assert(change!=NULL);
+
+    change->timer_lance = timer_lance;
+}//fin set_timer_lance
+
+void set_timer_label(Timer *change, GtkWidget *label){
+    assert(change!=NULL && label!=NULL);
+
+    change->pLabel = label;
+}//fin set_timer_label
 
 Data_for_Callback *constructeur_Data_for_Callback(Terrain *terrain, GtkWidget *pFenetre){
     assert(terrain!=NULL && pFenetre!=NULL);
@@ -116,11 +175,25 @@ void destructeur_Terrain(Terrain *terrain){
     if(terrain->champ_mine!=NULL)
         destructeur_champ_mine(terrain->champ_mine, terrain->regle->ligne, terrain->regle->colonne);
     destructeur_Regle(terrain->regle);
+    destructeur_Timer(terrain->timer);
     free(terrain);
 }//fin destructeur_Terrain
 
+Timer *get_timer(Terrain *recup){
+    assert(recup!=NULL);
+
+    return recup->timer;
+}//fin get_timer
+
+void set_timer(Terrain *change, Timer *timer){
+    assert(change!=NULL && timer!=NULL);
+
+    change->timer =timer; 
+}//fin set_timer
+
 Boite ***get_champ_mine(Terrain *recup){
     assert(recup!=NULL);
+
     return recup->champ_mine;
 }//fin get_champ_mine
 

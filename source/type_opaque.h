@@ -43,6 +43,29 @@ typedef struct Terrain_t Terrain;
  */
 typedef struct Data_for_Callback_t Data_for_Callback;
 
+/**
+ * \struct typedef struct Timer_t Timer
+ * \brief Déclaration du type opaque Timer
+ *
+ */
+typedef struct Timer_t Timer;
+
+Timer *constructeur_Timer(int temps_restant);
+
+void destructeur_Timer(Timer *timer);
+
+int get_temps_restant(Timer *recup);
+
+int get_timer_lance(Timer *recup);
+
+GtkWidget *get_label_timer(Timer *recup);
+
+void set_temps_restant(Timer *change, int temps_restant);
+
+void set_timer_lance(Timer *change, int timer_lance);
+
+void set_timer_label(Timer *change, GtkWidget *label);
+
 Data_for_Callback *constructeur_Data_for_Callback(Terrain *terrain, GtkWidget *pFenetre);
 
 void destructeur_Data_for_Callback(Data_for_Callback *data);
@@ -111,6 +134,10 @@ void set_coord_boutton(Data_for_Callback *data, unsigned int coord[2]);
 Terrain *constructeur_Terrain(unsigned short ligne, unsigned short colonne, unsigned short temps, unsigned short nombre_mine);
 
 void destructeur_Terrain(Terrain *terrain);
+
+Timer *get_timer(Terrain *recup);
+
+void set_timer(Terrain *change, Timer *timer);
 
 /**
  * \fn get_champ_mine(Terrain *recup)

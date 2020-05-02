@@ -103,4 +103,6 @@ void reinitialise_image_bouton(Terrain *terrain);
  */
 void fenetre_pop_up_a_propos(void);
 
+void maj_timer(Timer *timer);
+
 #endif

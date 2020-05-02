@@ -35,6 +35,8 @@ void click_difficulte_debutant(GtkWidget *pButton, gpointer data){
     GtkWidget *pFenetre = get_fenetre(recup_data);
 
     mode_debutant(get_Terrain(recup_data));
+    set_timer_label(get_timer(get_Terrain(recup_data)), gtk_label_new(NULL));
+    maj_timer(get_timer(get_Terrain(recup_data)));
     reinitialise_fenetre_nouvelle_pvbox(recup_data);
     gtk_window_resize(GTK_WINDOW(pFenetre), 300, 400);
     gtk_widget_show_all(pFenetre);
@@ -48,6 +50,8 @@ void click_difficulte_intermediaire(GtkWidget *pButton, gpointer data){
     GtkWidget *pFenetre = get_fenetre(recup_data);
     
     mode_intermediaire(get_Terrain(recup_data));
+    set_timer_label(get_timer(get_Terrain(recup_data)), gtk_label_new(NULL));
+    maj_timer(get_timer(get_Terrain(recup_data)));
     reinitialise_fenetre_nouvelle_pvbox(recup_data);
     gtk_window_resize(GTK_WINDOW(pFenetre), 600, 700);
     gtk_widget_show_all(pFenetre);
@@ -61,6 +65,8 @@ void click_difficulte_expert(GtkWidget *pButton, gpointer data){
     GtkWidget *pFenetre = get_fenetre(recup_data);
 
     mode_expert(get_Terrain(recup_data));
+    set_timer_label(get_timer(get_Terrain(recup_data)), gtk_label_new(NULL));
+    maj_timer(get_timer(get_Terrain(recup_data)));
     reinitialise_fenetre_nouvelle_pvbox(recup_data);
     gtk_window_resize(GTK_WINDOW(pFenetre), 1000, 1100);
     gtk_widget_show_all(pFenetre);
@@ -81,6 +87,12 @@ void click_decouvre_case(GtkWidget *pButton, GdkEventButton *type_click, gpointe
     Data_for_Callback *recup_data = data;
     if(get_win(get_regle(get_Terrain(recup_data)))!=0)
         return;
+
+    if(get_timer_lance(get_timer(get_Terrain(recup_data)))==0){
+        set_timer_lance(get_timer(get_Terrain(recup_data)), 1);
+        demarre_timer(get_Terrain(recup_data));
+    }
+    
     unsigned int *coord = get_coord_boutton(recup_data);
     unsigned int ligne = get_ligne(get_regle(get_Terrain(recup_data))), colonne = get_colonne(get_regle(get_Terrain(recup_data)));
     if(get_Boite_decouverte(get_elem_champ_mine(get_Terrain(recup_data), coord[0], coord[1]))==1){
@@ -140,5 +152,7 @@ void click_a_propos(GtkWidget *pButton, gpointer data){
 
     fenetre_pop_up_a_propos();
 }
+
+
 
 

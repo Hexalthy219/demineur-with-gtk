@@ -54,12 +54,13 @@ all_doc: $(DOC)
 	mkdir -p doc
 	mv html doc/html
 	mv latex doc/latex
+	mv doc ../doc
 
 clean_latex:
-	rm -r doc/latex/
+	cd .. && rm -r doc/latex/
 
 clean_doc:
-	rm -r doc
+	cd .. && rm -r doc
 
 #rapport
 rapport:all_rapport clean_log_aux
@@ -75,7 +76,7 @@ clean_rapport: clean_log_aux
 
 #création archive
 archive:
-	tar -zcvf 
+	cd .. && tar -zcvf demineur_01.tar.gz source rapport doc
 
 #supp fichiers objets + executable
 clean:
